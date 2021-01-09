@@ -6,6 +6,9 @@ This program prints out the statement: "Hello world!" with a line at the end whe
 
 	$ clang -Wall -Wextra -Werror -Wpedantic -o hello hello.c
 
+## Running 
+	$ ./hello
+
 ## Cleaning 
 
 	$ rm -f hello hello.c CHEATING.pdf.swy
