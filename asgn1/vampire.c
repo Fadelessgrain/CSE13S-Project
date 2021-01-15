@@ -38,12 +38,18 @@ int main(void) {
                         loser = lives[0]; // sets the min roll to 0
                         if (loser > lives[i]) { // checks to find a lower min
                             loser = lives[i]; // if it finds a lower min, make that my new min
-                            printf("%s is forced to eat garlic!", names[i]);
+                            printf("%s is forced to eat garlic!", names[loser]);
+                            lives[loser] -= 1;
+                            if (lives[loser] == 1) {
+                                printf("%s has %u life remaining.\n", names[loser], lives[loser]);
+                            } else {
+                                printf("%s has %u lives remaining.\n", names[loser], lives[loser]);
+                            }
                         }
                     }
                 }
             }
+            return 0;
         }
-        return 0;
     }
 }
