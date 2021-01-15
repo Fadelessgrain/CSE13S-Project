@@ -28,7 +28,7 @@ int main(void) {
        	exit(1);    
 	  } else {
 	  	srand(seed); //sets the seed
-		for (int i = 1; i < lives[i]; i +=1) { //loop as long as there are lives < counter
+		for (int i = 1; lives[i] != 0; i +=1) { //loop as long as there are lives < counter
 			printf("Round %d\n", i); // prints the rounds
 			for (int s = 0; s < players; s+= 1){ // loops through the players
 				if (lives[s] != 0){ // only players with more than 0 lives can roll
