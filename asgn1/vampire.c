@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <stdlib.h>
+int roll(void) {
+	return rand() % 6;
+
+}
 
 int lives[10] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // creates lives
 int main(void) {
@@ -23,13 +27,12 @@ int main(void) {
 	  	fprintf(stderr, "Invalid random seed\n");                   
        	exit(1);    
 	  } else {
+	  	srand(seed); //sets the seed
 		for (int i = 1; i < lives[i]; i +=1) { //loop as long as there are lives < counter
 			printf("Round %d\n", i); // prints the rounds
 			for (int s = 0; s < players; s+= 1){ // loops through the players
 				if (lives[s] != 0){ // only players with more than 0 lives can roll
-					srand(seed); //sets the seed
-					int r = rand() % 6; //random 
-					printf(" - %s rolls %s\n",names[s], rolls[r][r]); //prints the roll
+					printf(" - %s rolls %s\n",names[s], rolls[roll()][roll()]); //prints the roll
 				int loser = 0; // tracks the min roll
 				loser = lives[0]; // sets the min roll to 0
 				if (lives[s] < loser) { // checks to find a lower min
