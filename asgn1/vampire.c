@@ -3,8 +3,9 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 int roll(void) {
-    return rand() % 6;
+    return random() % 6;
 }
 
 int lives[10] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // creates lives
@@ -26,30 +27,35 @@ int main(void) {
             fprintf(stderr, "Invalid random seed\n");
             exit(1);
         } else {
-            srand(seed); //sets the seed
-            for (int i = 1; lives[i] != 0; i += 1) { //loop as long as there are lives < counter
+
+            srandom(seed); //sets the seed
+            int alive = players;
+            printf("%d", alive);
+            int loser;
+            loser = lives[0];
+            for (int i = 1; 8 > i; i += 1) { //loop as long as there are players around
                 printf("Round %d\n", i); // prints the rounds
                 for (int s = 0; s < players; s += 1) { // loops through the players
-                    if (lives[s] != 0) { // only players with more than 0 lives can roll
+                    if (lives[s] == 0) {
+                        alive -= 1;
+                        printf("%d", alive);
+                        //    if (lives[s] != 0) { // only players with more than 0 lives can roll
+                    } else {
                         printf(
                             " - %s rolls %s\n", names[s], rolls[roll()][roll()]); //prints the roll
-                        //	for (int t = 0; t < 10; t += 1) {
-                        int loser = 0; // tracks the min roll
-                        loser = lives[0]; // sets the min roll to 0
-                        if (loser > lives[i]) { // checks to find a lower min
-                            loser = lives[i]; // if it finds a lower min, make that my new min
+                        if (loser > lives[s]) { // checks to find a lower min
+                            loser = lives[s]; // if it finds a lower min, make that my new min
                             printf("%s is forced to eat garlic!", names[loser]);
-                            lives[loser] -= 1;
-                            if (lives[loser] == 1) {
+                            lives[loser] -= 1; //subtracts the lives of the loser
+                            if (lives[loser] == 1) { // one life for style purpose
                                 printf("%s has %u life remaining.\n", names[loser], lives[loser]);
-                            } else {
+                            } else { //multiple lives for style purpose
                                 printf("%s has %u lives remaining.\n", names[loser], lives[loser]);
                             }
                         }
                     }
                 }
             }
-            return 0;
         }
     }
 }
