@@ -52,16 +52,19 @@ int main(void) {
                         lives[l] -= 1;
                         printf("%s is forced to eat garlic!\n", names[index]);
                         loser = 13;
-                        printf("%s has %d life.\n", names[index], lives[l]);
+                        if (lives[l] == 1) {
+                            printf("%s has %d life.\n", names[index], lives[l]);
+                        } else {
+                            printf("%s has %d lives.\n", names[index], lives[l]);
+                        }
+                        if (lives[index] == 0) {
+                            alive -= 1;
+                            printf("%s has died\n", names[index]);
+                        }
+                        rounds += 1;
                     }
-                    if (lives[index] == 0) {
-                        alive -= 1;
-                        printf("%s has died\n", names[index]);
-                    }
-                    rounds += 1;
                 }
             }
         }
     }
 }
-//}
