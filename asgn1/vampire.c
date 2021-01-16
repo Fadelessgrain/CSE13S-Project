@@ -31,31 +31,29 @@ int main(void) {
             srandom(seed); //sets the seed
             int alive = players;
             printf("%d", alive);
-            int loser;
-            loser = lives[0];
-            for (int i = 1; 8 > i; i += 1) { //loop as long as there are players around
-                printf("Round %d\n", i); // prints the rounds
-                for (int s = 0; s < players; s += 1) { // loops through the players
-                    if (lives[s] == 0) {
-                        alive -= 1;
-                        printf("%d", alive);
-                        //    if (lives[s] != 0) { // only players with more than 0 lives can roll
-                    } else {
-                        printf(
-                            " - %s rolls %s\n", names[s], rolls[roll()][roll()]); //prints the roll
-                        if (loser > lives[s]) { // checks to find a lower min
-                            loser = lives[s]; // if it finds a lower min, make that my new min
-                            printf("%s is forced to eat garlic!", names[loser]);
-                            lives[loser] -= 1; //subtracts the lives of the loser
-                            if (lives[loser] == 1) { // one life for style purpose
-                                printf("%s has %u life remaining.\n", names[loser], lives[loser]);
-                            } else { //multiple lives for style purpose
-                                printf("%s has %u lives remaining.\n", names[loser], lives[loser]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+      		int loser = 13;
+			int rounds = 1;
+			int index = 0;
+			while (rounds < 8){
+			printf("Round %d\n", rounds);
+			for (int s = 0; s != players; s+=1) {
+				int r1 = roll();
+				int r2 = roll();
+				int r3 = r1 + r2;
+				printf(" - %s rolls %s... %d\n",names[s], rolls[r1][r2], r3); 
+				if (r3 < loser) {
+					loser = r3;
+					index = s;
+				}
+			rounds += 1;
+			if (s+1 == players) {
+				printf("The min: %d\n", loser);
+				printf("%s is forced to eat garlic!", names[index]);
+				loser = 13;
+			}
+
     }
+}
+}
+}
 }
