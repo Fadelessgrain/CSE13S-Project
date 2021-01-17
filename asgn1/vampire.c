@@ -118,13 +118,17 @@ int main(void) {
                         winner = 0;
                         if (lives[l] == 1) {
                             printf("%s has %d life remaining.\n", names[index], lives[l]);
-                        }
-                        if (lives[l] > 0) {
-                            printf("%s has %d lives remaining.\n", names[index], lives[l]);
-                        }
-                        if (lives[l] == 0) {
-                            alive -= 1;
-                            printf("%s has died\n", names[index]);
+                            //}
+                            //if (lives[l] == 0) {
+                            //  alive -= 1;
+                            // printf("%s has died\n", names[index]);
+                        } else {
+                            if (lives[l] == 0) {
+                                alive -= 1;
+                                printf("%s has died\n", names[index]);
+                            } else {
+                                printf("%s has %d lives remaining.\n", names[index], lives[l]);
+                            }
                         }
                         if (alive == 1) {
                             printf("%s wins the Garlic Game!\n", names[w]);
