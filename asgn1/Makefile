@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -Wall -Werror -Wextra -Wpedantic -std=c17
+CFLAGS = -Wall -Werror -Wextra -Wpedantic  
 
 all: vampire
 
