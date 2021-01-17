@@ -11,11 +11,11 @@ uint32_t left(uint32_t pos, uint32_t players) {
 uint32_t right(uint32_t pos, uint32_t players) {
     return (pos + 1) % players;
 }
-
+//Code below from Eugene's secion
 int roll(void) {
     return random() % 6;
 }
-
+//Code above from Eugenue's section
 int lives[10] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // creates lives
 
 int main(void) {
@@ -23,18 +23,20 @@ int main(void) {
     printf("Number of players: ");
     scanf("%d", &players);
     if (players < 2 || players > 10) {
-        fprintf(stderr, "Invalid Number of players.");
+        fprintf(stderr, "Invalid number of players.");
         exit(1);
     } else {
+        // code below from Eugene's section
         int64_t seed = 0;
         printf("Random seed: ");
         if (scanf("%" SCNd64, &seed) != 1 || seed < 0) {
-            fprintf(stderr, "Invalid Number of seeds.");
+            fprintf(stderr, "Invalid random seed.");
             exit(1);
         }
         if (seed > UINT32_MAX) {
-            fprintf(stderr, "Invalid Number of seeds.");
+            fprintf(stderr, "Invalid random of seed.");
             exit(1);
+            // code above from Eugene's section
         } else {
             srandom(seed);
             int alive = players;
@@ -118,14 +120,10 @@ int main(void) {
                         winner = 0;
                         if (lives[l] == 1) {
                             printf("%s has %d life remaining.\n", names[index], lives[l]);
-                            //}
-                            //if (lives[l] == 0) {
-                            //  alive -= 1;
-                            // printf("%s has died\n", names[index]);
                         } else {
                             if (lives[l] == 0) {
                                 alive -= 1;
-                                printf("%s has died\n", names[index]);
+                                printf("%s has died.\n", names[index]);
                             } else {
                                 printf("%s has %d lives remaining.\n", names[index], lives[l]);
                             }
