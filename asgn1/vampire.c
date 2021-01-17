@@ -58,47 +58,28 @@ int main(void) {
                         if (rolls[r1][r2] == rolls[5][5]) {
                             r = right(s, players);
                             L = left(s, players);
-                            if (lives[r] == 0 && lives[L] == 0) {
+                            lives[L] += 1;
+                            lives[r] += 1;
+                            if (lives[L] == 1) {
                                 alive += 1;
-                                alive += 1;
-                                lives[L] += 1;
-                                lives[r] += 1;
-                                printf(" - %s rolls %s... resurrects %s resurrects %s\n", names[s],
-                                    rolls[r1][r2], names[L], names[r]);
+                                if (lives[r] == 1) {
+                                    alive += 1;
+                                    printf(" - %s rolls %s... resurrects %s resurrects %s\n",
+                                        names[s], rolls[r1][r2], names[L], names[r]);
+                                } else {
+                                    printf(" - %s rolls %s... resurrects %s sparkles %s\n",
+                                        names[s], rolls[r1][r2], names[L], names[r]);
+                                }
                             }
-                            if (lives[r] != 0 && lives[L] != 0) {
-                                lives[r] += 1;
-                                lives[L] += 1;
-                                printf(" - %s rolls %s... sparkles %s sparkles %s\n", names[s],
-                                    rolls[r1][r2], names[L], names[r]);
-                            }
-                            if (lives[r] != 0 && lives[L] == 0) {
-                                lives[r] += 1;
-                                lives[L] += 1;
-                                alive += 1;
-                                printf(" - %s rolls %s... resurrects %s sparkles %s\n", names[s],
-                                    rolls[r1][r2], names[L], names[r]);
-                            }
-                            if (lives[L] == 0 && lives[r] != 0) {
-                                lives[r] += 1;
-                                lives[L] += 1;
-                                alive += 1;
-                                printf(" - %s rolls %s... resurrects %s sparkles %s\n", names[s],
-                                    rolls[r1][r2], names[L], names[r]);
-                            }
-                            if (lives[r] == 0 && lives[L] != 0) {
-                                lives[r] += 1;
-                                lives[L] += 1;
-                                alive += 1;
-                                printf(" - %s rolls %s... sparkles %s resurrects %s\n", names[s],
-                                    rolls[r1][r2], names[L], names[r]);
-                            }
-                            if (lives[L] != 0 && lives[r] == 0) {
-                                lives[r] += 1;
-                                lives[L] += 1;
-                                alive += 1;
-                                printf(" - %s rolls %s... sparkles %s resurrects %s\n", names[s],
-                                    rolls[r1][r2], names[L], names[r]);
+                            if (lives[L] > 1) {
+                                if (lives[r] > 1) {
+                                    printf(" - %s rolls %s... sparkles %s sparkles %s\n", names[s],
+                                        rolls[r1][r2], names[L], names[r]);
+                                } else {
+                                    alive += 1;
+                                    printf(" - %s rolls %s... sparkles %s resurrects %s\n",
+                                        names[s], rolls[r1][r2], names[L], names[r]);
+                                }
                             }
                         } else {
                             printf(" - %s rolls %s...\n", names[s], rolls[r1][r2]);
