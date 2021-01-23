@@ -1,7 +1,7 @@
 #include "mathlib.h"
 
-#include <stdio.h>
-
+//#include <stdio.h>
+#include <math.h>
 #define EPSILON 1e-14
 
 static inline double Abs(double x) {
@@ -9,6 +9,7 @@ static inline double Abs(double x) {
 }
 
 double Sin(double x) {
+	x = fmod(x, 2 * M_PI);
     double num = x;
     double den = 1.0;
     double sum = num / den;
@@ -25,6 +26,7 @@ double Sin(double x) {
 }
 
 double Cos(double x) {
+	x = fmod(x, 2*M_PI);
     double num = 1.0;
     double den = 1.0;
     double sum = num / den;
@@ -40,6 +42,7 @@ double Cos(double x) {
 }
 
 double Tan(double x) {
+	x = fmod(x, (1/3) * M_PI);
     double num = Sin(x);
     double den = Cos(x);
     return num / den;
