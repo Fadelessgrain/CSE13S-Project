@@ -45,3 +45,19 @@ double Sin(double x) {
 	double den = Cos(x);
  	return num/den;
 }
+
+double Exp(double x) {
+	double num = 1.0;
+	double den = 1.0;
+	double term = num/den;
+	double sum = term;
+	for (double factorial = 1.0; Abs(term) > EPSILON; factorial += 1.0) {
+		term = (x / factorial) * term;
+		sum = sum + term;
+		
+	}
+		return sum;
+	
+}
+
+

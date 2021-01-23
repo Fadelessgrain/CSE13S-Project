@@ -34,7 +34,8 @@ int main(int argc, char **argv) {
 	case 'l':
 		return_log = true;
          break;
-
+	default: 
+	fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
 		}
 	}
 	if (return_sin == true ) {
@@ -73,6 +74,17 @@ int main(int argc, char **argv) {
              }
     }
 
+if (return_exp == true ) {
+              printf("  x           Exp              Library        Difference\n");
+              printf("  -           ---               -------        ---------\n");
+              for (double x = 1; x <= 10; x+= 0.1) {
+                      double my_exp = Exp(x);
+                      double library_exp = exp(x);
+                      double diffe = my_exp - library_exp;
+                      printf("%7.4f % 16.8f % 16.8f % 16.10f\n",
+                       x, my_exp,library_exp, diffe);
+             }
+   }
 
 
 	return 0;
