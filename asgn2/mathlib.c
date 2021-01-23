@@ -60,4 +60,12 @@ double Exp(double x) {
 	
 }
 
-
+double Log(double x) {
+	double ex = 1.0;
+	double power = Exp(ex);
+	while (Abs(x-power) > EPSILON) {
+		ex = ex + ((x-power) / power);
+		power = Exp(ex);
+		}
+	return ex;
+	}

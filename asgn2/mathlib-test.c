@@ -84,8 +84,24 @@ if (return_exp == true ) {
                       printf("%7.4f % 16.8f % 16.8f % 16.10f\n",
                        x, my_exp,library_exp, diffe);
              }
-   }
 
 
-	return 0;
+}
+
+if (return_log == true ) {
+                printf("  x           Log              Library        Difference\n");
+                printf("  -           ---               -------        ---------\n");
+                for (double x = 1; x <= 10; x+= 0.1) {
+                        double my_log = Log(x);
+                         double library_log = log(x);
+                         double diffe = my_log - library_log;
+                         printf("%7.4f % 16.8f % 16.8f % 16.10f\n",
+                          x, my_log,library_log, diffe);
+                }
+
+  
+  }
+
+
+return 0;
 }
