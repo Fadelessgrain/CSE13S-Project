@@ -40,3 +40,8 @@ double Sin(double x) {
       return sum;
  }
 
+ double Tan(double x) {
+ 	double num = Sin(x);
+	double den = Cos(x);
+ 	return num/den;
+}

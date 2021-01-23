@@ -38,8 +38,8 @@ int main(int argc, char **argv) {
 		}
 	}
 	if (return_sin == true ) {
-		printf("x		Sin		Library		Difference\n");
-		printf("-  		---		-------		----------\n");
+		printf("  x           Cos              Library        Difference\n");
+		printf("  -           ---               -------        ---------\n");
 		for (double x = -2*M_PI; x < 2 *M_PI; x+= 0.1) {             
 				double my_sin = Sin(x);
 				double library_sin = sin(x);
@@ -48,5 +48,32 @@ int main(int argc, char **argv) {
 				library_sin, diff);
 		}
 	}
+	
+	if (return_cos == true ) {
+           printf("  x           Cos              Library        Difference\n");
+           printf("  -           ---    	       -------        ---------\n");
+           for (double x = -2*M_PI; x < 2 *M_PI; x+= 0.1) {
+                   double my_cos = Cos(x);
+                   double library_cos = cos(x);
+                   double diffe = my_cos - library_cos;
+                   printf("%7.4f % 16.8f % 16.8f % 16.10f\n", 
+  					x, my_cos,library_cos, diffe);
+           }
+  }
+
+  if (return_tan == true ) {
+              printf("  x           Tan              Library        Difference\n");
+              printf("  -           ---               -------        ---------\n");
+              for (double x = -1*(M_PI/3); x < (M_PI/3); x+= 0.1) {
+                      double my_tan = Tan(x);
+                      double library_tan = tan(x);
+                      double diffe = my_tan - library_tan;
+                      printf("%7.4f % 16.8f % 16.8f % 16.10f\n",
+                       x, my_tan,library_tan, diffe);
+             }
+    }
+
+
+
 	return 0;
 }
