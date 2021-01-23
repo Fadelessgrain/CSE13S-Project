@@ -16,7 +16,6 @@ double Sin(double x) {
 	double term = num/den;
 //	int factorial_ = 3.0;
 	for (double factorial = 3.0; Abs(term) > EPSILON; factorial += 2.0) {
-	//	factorial_ += 2.0;
 		double  mul = -x * x;
 		num = num * mul; 
 		den = den * (factorial-1) * factorial;
@@ -25,3 +24,19 @@ double Sin(double x) {
 	}
 	return sum; 
 }
+
+ double Cos(double x) {
+       double num = 1.0;
+      double den = 1.0;
+       double sum = num/den;
+       double term = num/den;
+       for (double factorial = 2.0; Abs(term) > EPSILON; factorial += 2.0) {
+           double  mul = -x * x;
+   	       num = num * mul;
+           den = den * (factorial-1)* factorial ;
+           term = num/den;
+          sum = sum + term;
+      }
+      return sum;
+ }
+
