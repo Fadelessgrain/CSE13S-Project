@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
+//code below inspired by Eugene's lab
 #define OPTIONS "asctel"
 
 int main(int argc, char **argv) {
@@ -27,6 +28,7 @@ int main(int argc, char **argv) {
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
+    //code above inspired by Eugene's lab
     if (return_sin == true) {
         printf("  x           Cos              Library        Difference\n");
         printf("  -           ---               -------        ---------\n");
