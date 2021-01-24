@@ -42,6 +42,7 @@ double Sin(double x) {
 //the Cos function is simialr to the Sin function but the numerator starts at 1 and not at x
 //because of the Taylor series fos Cos
 double Cos(double x) {
+	//normalizes x
     x = fmod(x, 2 * M_PI);
     double num = 1.0;
     double den = 1.0;
@@ -59,7 +60,6 @@ double Cos(double x) {
 }
 
 double Tan(double x) {
-    x = fmod(x, (1 / 3) * M_PI);
     double num = Sin(x);
     double den = Cos(x);
     return num / den;
