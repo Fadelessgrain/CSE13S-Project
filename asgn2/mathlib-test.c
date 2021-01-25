@@ -39,7 +39,6 @@ int main(int argc, char **argv) {
             printf("%7.4f % 16.8f % 16.8f % 16.10f\n", x, my_sin, library_sin, diff);
         }
     }
-    
 
     if (r_cos == true) {
         printf("  x           Cos              Library        Difference\n");
