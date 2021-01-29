@@ -37,8 +37,6 @@ int uv_cols(Universe *u) {
     return u->cols;
 }
 
-
-
 int main(void) {
     return 0;
 }
