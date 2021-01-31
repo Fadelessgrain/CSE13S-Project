@@ -49,7 +49,7 @@ int uv_cols(Universe *u) {
 }
 
 bool out_of_bounds(Universe *u, int r, int c) {
-    if (r >= u->rows || r < 0 || c >= u->cols || c < 0) {
+    if (r > u->rows || r < 0 || c >->rows || c < 0) {
         return false;
     } else {
         return true;
@@ -127,10 +127,10 @@ int uv_census(Universe *u, int r, int c) {
             neighboors += 1;
         }
     } else {
-        int r_1 = (r - 1 + u->rows) % u->rows;
-        int c_1 = (c - 1 + u->cols) % u->cols;
-        int r_plus_1 = (r + 1 + u->rows) % u->rows;
-        int c_plus_1 = (c + 1 + u->cols) % u->cols;
+        int r_1 = ((r - 1) + u->rows - 1) % u->rows;
+        int c_1 = ((c - 1) + u->cols - 1) % u->cols;
+        int r_plus_1 = ((r + 1) + u->rows - 1) % u->rows;
+        int c_plus_1 = ((c + 1) + u->cols - 1) % u->cols;
         if (uv_get_cell(u, r_1, c_1) == true) {
             neighboors += 1;
         }
@@ -162,12 +162,10 @@ int uv_census(Universe *u, int r, int c) {
 void uv_print(Universe *u, FILE *outfile) {
     for (int i = 0; i < u->rows; i++) {
         for (int t = 0; t < u->cols; t++) {
-            if (u->grid[u->rows][u->cols] == true) {
-                fputc('o', outfile);
-                printf("0");
+            if (u->grid[i][t] == true) {
+                fprintf(outfile, "%s", "o");
             } else {
-                fputc('.', outfile);
-                printf("o");
+                fprintf(outfile, "%s", ".");
             }
         }
     }

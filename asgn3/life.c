@@ -9,8 +9,8 @@
 #define DELAY   50000
 
 int main(int argc, char **argv) {
-    int rows;
-    int cols;
+    int rows = 0;
+    int cols = 0;
     int opt = 0;
     FILE *infile = stdin;
     FILE *outfile = stdout;
@@ -18,8 +18,6 @@ int main(int argc, char **argv) {
     int generation = 100;
 
     bool toroidal = true;
-    //    fscanf(infile, "%d %d\n", &rows, &cols);
-
     bool r_s = true;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
@@ -67,7 +65,7 @@ int main(int argc, char **argv) {
                 if (count == 2 || count == 3) {
                     uv_live_cell(b, r, c);
                     if (r_s == true) {
-                        mvprintw(r, c, "o");
+                        mvprintw(r, c, "o\n");
                         usleep(DELAY);
                     }
                 }
@@ -75,7 +73,7 @@ int main(int argc, char **argv) {
                 if (x == false && count == 3) {
                     uv_live_cell(b, r, c);
                     if (r_s == true) {
-                        mvprintw(r, c, "o");
+                        mvprintw(r, c, "o\n");
                         usleep(DELAY);
                     }
                 } else {
