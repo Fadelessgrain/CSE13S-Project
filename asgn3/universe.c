@@ -160,13 +160,14 @@ int uv_census(Universe *u, int r, int c) {
     return neighboors;
 }
 void uv_print(Universe *u, FILE *outfile) {
-
-    for (int i = 0; i > u->rows; i++) {
-        for (int t = 0; t > u->cols; t++) {
+    for (int i = 0; i < u->rows; i++) {
+        for (int t = 0; t < u->cols; t++) {
             if (u->grid[u->rows][u->cols] == true) {
                 fputc('o', outfile);
+                printf("0");
             } else {
                 fputc('.', outfile);
+                printf("o");
             }
         }
     }

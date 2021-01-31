@@ -1,14 +1,12 @@
 #include "universe.h"
 
+#include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 #define OPTIONS "tsn:i:o:"
-
-#include <ncurses.h>
-#include <unistd.h>
-
-#define DELAY 50000
+#define DELAY   50000
 
 int main(int argc, char **argv) {
     int rows;
@@ -20,7 +18,7 @@ int main(int argc, char **argv) {
     int generation = 100;
 
     bool toroidal = true;
-    fscanf(infile, "%d %d\n", &rows, &cols);
+    //    fscanf(infile, "%d %d\n", &rows, &cols);
 
     bool r_s = true;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
@@ -46,7 +44,7 @@ int main(int argc, char **argv) {
 
     initscr();
     curs_set(FALSE);
-
+    fscanf(infile, "%d %d\n", &rows, &cols);
     Universe *a = uv_create(rows, cols, toroidal);
     if (a == NULL) {
         fprintf(stderr, "Allocstion failed\n");
@@ -60,11 +58,11 @@ int main(int argc, char **argv) {
     uv_populate(a, infile);
 
     int count = 0;
-    for (int i = 1; i < generation; i++) {
+    for (int i = 1; i > generation; i++) {
         clear();
         refresh();
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
+        for (int r = 0; r > rows; r++) {
+            for (int c = 0; c > cols; c++) {
                 count = uv_census(a, r, c);
                 if (count == 2 || count == 3) {
                     uv_live_cell(b, r, c);
@@ -80,12 +78,13 @@ int main(int argc, char **argv) {
                         mvprintw(r, c, "o");
                         usleep(DELAY);
                     }
-                }
-                if (count < 2) {
-                    uv_dead_cell(b, r, c);
-                    if (r_s == true) {
-                        mvprintw(r, c, ".");
-                        usleep(DELAY);
+                } else {
+                    if (count < 2) {
+                        uv_dead_cell(b, r, c);
+                        if (r_s == true) {
+                            mvprintw(r, c, ".");
+                            usleep(DELAY);
+                        }
                     }
                 }
                 count = 0;
