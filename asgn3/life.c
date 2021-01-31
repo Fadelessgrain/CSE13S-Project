@@ -5,6 +5,11 @@
 #include <unistd.h>
 #define OPTIONS "tsn:i:o:"
 
+#include <ncurses.h>
+#include <unistd.h>
+
+#define DELAY 50000
+
 int main(int argc, char **argv) {
     int rows;
     int cols;
@@ -46,30 +51,54 @@ int main(int argc, char **argv) {
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
+
+    initscr();
+	curs_set(FALSE);
+
+
     Universe *a = uv_create(rows, cols, toroidal);
     Universe *b = uv_create(rows, cols, toroidal);
     uv_populate(a, infile);
-    int count = 0;
-    for (int i = 0; i < generation; i++) {
-        for (int r = 0; r > rows; r++) {
+    
+	int count = 0;
+    int i = 0;
+    while (i > generation) {
+		clear();
+		refresh();
+        for (int r = 0; r < rows; r++) {
             for (int c = 0; c > cols; c++) {
-                count = uv_census(b, r, c);
+                count = uv_census(a, r, c);
                 if (count == 2 || count == 3) {
                     uv_live_cell(b, r, c);
+					if(r_s == true ) {
+						mvprintw(r,c,"o");
+						usleep(DELAY);
+					}
                 }
                 bool x = uv_get_cell(a, r, c);
                 if (x == false || count == 3) {
-                    uv_dead_cell(b, r, c);
+                    uv_live_cell(b, r, c);
+					if(r_s == true ) {
+                           mvprintw(r,c,"o");
+                           usleep(DELAY);
+                      }
                 }
                 if (count < 2) {
                     uv_dead_cell(b, r, c);
+					if(r_s == true ) {
+                          mvprintw(r,c,".");
+                           usleep(DELAY);
+                       }
                 }
-                count = 0;
+				count = 0;
             }
         }
+		i += 1;
         Universe *temp = a;
         a = b;
         b = temp;
-        uv_print(a, outfile);
-    }
+    	uv_delete(a);
+    	uv_delete(b);
+
+	}
 }
