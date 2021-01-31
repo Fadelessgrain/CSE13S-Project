@@ -87,15 +87,17 @@ int main(int argc, char **argv) {
                         }
                     }
                 }
-                count = 0;
             }
         }
+        count = 0;
+        Universe *temp = b;
+        a = b;
+        b = temp;
+        // }
+        //}
     }
-    Universe *temp = b;
-    a = b;
-    b = temp;
     endwin();
     uv_print(a, outfile);
-    uv_delete(a);
     uv_delete(b);
+    uv_delete(a);
 }
