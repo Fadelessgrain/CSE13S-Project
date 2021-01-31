@@ -10,16 +10,27 @@ struct Universe {
 
 Universe *uv_create(int rows, int cols, bool toroidal) {
     Universe *u = (Universe *) calloc(1, sizeof(Universe));
+    if (u == NULL) {
+        fprintf(stderr, "Allocstion failed\n");
+        return NULL;
+    }
     u->rows = rows;
     u->cols = cols;
     u->toroidal = toroidal;
     u->grid = (bool **) calloc(rows, sizeof(bool *));
+    if (u == NULL) {
+        fprintf(stderr, "Allocstion failed\n");
+        return NULL;
+    }
     for (int i = 0; i < rows; i++) {
+        if (u == NULL) {
+            fprintf(stderr, "Allocstion failed\n");
+            return NULL;
+        }
         u->grid[i] = (bool *) calloc(cols, sizeof(bool));
     }
     return u;
 }
-
 void uv_delete(Universe *u) {
     for (int i = 0; i < u->rows; i++) {
         free(u->grid[i]);
@@ -38,7 +49,7 @@ int uv_cols(Universe *u) {
 }
 
 bool out_of_bounds(Universe *u, int r, int c) {
-    if (r >= u->rows & r < 0 & c >= u->cols & c < 0) {
+    if (r >= u->rows || r < 0 || c >= u->cols || c < 0) {
         return false;
     } else {
         return true;
@@ -46,25 +57,25 @@ bool out_of_bounds(Universe *u, int r, int c) {
 }
 
 void uv_live_cell(Universe *u, int r, int c) {
-    //  if (r < u->rows & r >= 0 & c < u->cols & c >= 0) {
     int x = out_of_bounds(u, r, c);
     if (x == true) {
         u->grid[r][c] = true;
+    } else {
+        return;
     }
-    return;
 }
 
 void uv_dead_cell(Universe *u, int r, int c) {
-    //    if (r < u->rows & r >= 0 & c < u->cols & c >= 0) {
     int x = out_of_bounds(u, r, c);
     if (x == true) {
         u->grid[r][c] = false;
+        return;
+    } else {
+        return;
     }
-    return;
 }
 
 bool uv_get_cell(Universe *u, int r, int c) {
-    // if (r >= u->rows & r < 0 & c >= u->cols & c < 0) {
     int x = out_of_bounds(u, r, c);
     if (x == false) {
         return false;
@@ -77,15 +88,14 @@ bool uv_populate(Universe *u, FILE *infile) {
     int row;
     int colum;
     while (fscanf(infile, "%d %d\n", &row, &colum) != EOF) {
-        u->grid[row][colum] = true;
         int x = out_of_bounds(u, row, colum);
         if (x == false) {
             return false;
         } else {
-            return true;
+            u->grid[row][colum] = true;
         }
     }
-    return u;
+    return true;
 }
 
 int uv_census(Universe *u, int r, int c) {
@@ -117,10 +127,10 @@ int uv_census(Universe *u, int r, int c) {
             neighboors += 1;
         }
     } else {
-        int r_1 = (r - 1 + u->rows - 1) % u->rows;
-        int c_1 = (c - 1 + u->cols - 1) % u->cols;
-        int r_plus_1 = (r + 1 + u->rows - 1) % u->rows;
-        int c_plus_1 = (c + 1 + u->cols - 1) % u->cols;
+        int r_1 = (r - 1 + u->rows) % u->rows;
+        int c_1 = (c - 1 + u->cols) % u->cols;
+        int r_plus_1 = (r + 1 + u->rows) % u->rows;
+        int c_plus_1 = (c + 1 + u->cols) % u->cols;
         if (uv_get_cell(u, r_1, c_1) == true) {
             neighboors += 1;
         }

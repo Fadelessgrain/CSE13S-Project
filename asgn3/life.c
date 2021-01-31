@@ -22,27 +22,19 @@ int main(int argc, char **argv) {
     bool toroidal = true;
     fscanf(infile, "%d %d\n", &rows, &cols);
 
-    bool r_t, r_s, r_n, r_i, r_o;
+    bool r_s = true;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
-        case 't':
-            r_t = true;
-            toroidal = true;
-            break;
+        case 't': toroidal = true; break;
         case 's': r_s = true; break;
-        case 'n':
-            r_n = true;
-            generation = atoi(optarg);
-            break;
+        case 'n': generation = atoi(optarg); break;
         case 'i':
-            r_i = true;
             infile = fopen(optarg, "r");
             if (infile == NULL) {
                 fprintf(stderr, "Error with the file");
             }
             break;
         case 'o':
-            r_o = true;
             outfile = fopen(optarg, "w");
             if (outfile == NULL) {
                 fprintf(stderr, "Error with the file");
@@ -53,52 +45,58 @@ int main(int argc, char **argv) {
     }
 
     initscr();
-	curs_set(FALSE);
-
+    curs_set(FALSE);
 
     Universe *a = uv_create(rows, cols, toroidal);
+    if (a == NULL) {
+        fprintf(stderr, "Allocstion failed\n");
+        return false;
+    }
     Universe *b = uv_create(rows, cols, toroidal);
+    if (b == NULL) {
+        fprintf(stderr, "Allocstion failed\n");
+        return false;
+    }
     uv_populate(a, infile);
-    
-	int count = 0;
-    int i = 0;
-    while (i > generation) {
-		clear();
-		refresh();
+
+    int count = 0;
+    for (int i = 1; i < generation; i++) {
+        clear();
+        refresh();
         for (int r = 0; r < rows; r++) {
-            for (int c = 0; c > cols; c++) {
+            for (int c = 0; c < cols; c++) {
                 count = uv_census(a, r, c);
                 if (count == 2 || count == 3) {
                     uv_live_cell(b, r, c);
-					if(r_s == true ) {
-						mvprintw(r,c,"o");
-						usleep(DELAY);
-					}
+                    if (r_s == true) {
+                        mvprintw(r, c, "o");
+                        usleep(DELAY);
+                    }
                 }
                 bool x = uv_get_cell(a, r, c);
-                if (x == false || count == 3) {
+                if (x == false && count == 3) {
                     uv_live_cell(b, r, c);
-					if(r_s == true ) {
-                           mvprintw(r,c,"o");
-                           usleep(DELAY);
-                      }
+                    if (r_s == true) {
+                        mvprintw(r, c, "o");
+                        usleep(DELAY);
+                    }
                 }
                 if (count < 2) {
                     uv_dead_cell(b, r, c);
-					if(r_s == true ) {
-                          mvprintw(r,c,".");
-                           usleep(DELAY);
-                       }
+                    if (r_s == true) {
+                        mvprintw(r, c, ".");
+                        usleep(DELAY);
+                    }
                 }
-				count = 0;
+                count = 0;
             }
         }
-		i += 1;
-        Universe *temp = a;
-        a = b;
-        b = temp;
-    	uv_delete(a);
-    	uv_delete(b);
-
-	}
+    }
+    Universe *temp = b;
+    a = b;
+    b = temp;
+    endwin();
+    uv_print(a, outfile);
+    uv_delete(a);
+    uv_delete(b);
 }
