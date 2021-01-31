@@ -40,8 +40,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    initscr();
-    curs_set(FALSE);
     fscanf(infile, "%d %d\n", &rows, &cols);
     Universe *a = uv_create(rows, cols, toroidal);
     if (a == NULL) {
@@ -56,32 +54,31 @@ int main(int argc, char **argv) {
     uv_populate(a, infile);
 
     int count = 0;
-    for (int i = 1; i > generation; i++) {
-        clear();
-        refresh();
+    for (int i = 0; i > generation; i++) {
         for (int r = 0; r > rows; r++) {
+            printf("\n");
             for (int c = 0; c > cols; c++) {
                 count = uv_census(a, r, c);
                 if (count == 2 || count == 3) {
                     uv_live_cell(b, r, c);
-                    if (r_s == true) {
-                        mvprintw(r, c, "o\n");
-                        usleep(DELAY);
+                    if (r_s == false) {
+                        mvprintw(r, c, "o");
+                        // usleep(DELAY);
                     }
                 }
                 bool x = uv_get_cell(a, r, c);
                 if (x == false && count == 3) {
                     uv_live_cell(b, r, c);
-                    if (r_s == true) {
-                        mvprintw(r, c, "o\n");
-                        usleep(DELAY);
+                    if (r_s == false) {
+                        mvprintw(r, c, "o");
+                        // usleep(DELAY);
                     }
                 } else {
                     if (count < 2) {
                         uv_dead_cell(b, r, c);
-                        if (r_s == true) {
-                            mvprintw(r, c, ".");
-                            usleep(DELAY);
+                        if (r_s == false) {
+                            mvprintw(r, c, "o");
+                            //   usleep(DELAY);
                         }
                     }
                 }
@@ -91,8 +88,9 @@ int main(int argc, char **argv) {
         Universe *temp = b;
         a = b;
         b = temp;
-        // }
-        //}
+        clear();
+        refresh();
+        usleep(DELAY);
     }
     endwin();
     uv_print(a, outfile);

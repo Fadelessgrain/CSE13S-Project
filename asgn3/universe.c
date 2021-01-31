@@ -11,7 +11,7 @@ struct Universe {
 Universe *uv_create(int rows, int cols, bool toroidal) {
     Universe *u = (Universe *) calloc(1, sizeof(Universe));
     if (u == NULL) {
-        fprintf(stderr, "Allocstion failed\n");
+        fprintf(stderr, "Allocation failed\n");
         return NULL;
     }
     u->rows = rows;
@@ -19,12 +19,12 @@ Universe *uv_create(int rows, int cols, bool toroidal) {
     u->toroidal = toroidal;
     u->grid = (bool **) calloc(rows, sizeof(bool *));
     if (u == NULL) {
-        fprintf(stderr, "Allocstion failed\n");
+        fprintf(stderr, "Allocation failed\n");
         return NULL;
     }
     for (int i = 0; i < rows; i++) {
         if (u == NULL) {
-            fprintf(stderr, "Allocstion failed\n");
+            fprintf(stderr, "Allocation failed\n");
             return NULL;
         }
         u->grid[i] = (bool *) calloc(cols, sizeof(bool));
@@ -49,7 +49,7 @@ int uv_cols(Universe *u) {
 }
 
 bool out_of_bounds(Universe *u, int r, int c) {
-    if (r > u->rows || r < 0 || c >->rows || c < 0) {
+    if (r > u->rows || r < 0 || c > u->rows || c < 0) {
         return false;
     } else {
         return true;
@@ -85,17 +85,20 @@ bool uv_get_cell(Universe *u, int r, int c) {
 }
 
 bool uv_populate(Universe *u, FILE *infile) {
-    int row;
-    int colum;
+    int row = 0;
+    int colum = 0;
+    bool dim = false;
     while (fscanf(infile, "%d %d\n", &row, &colum) != EOF) {
+        dim = true;
         int x = out_of_bounds(u, row, colum);
-        if (x == false) {
+        if (x == false && dim == true) {
             return false;
+            fprintf(stderr, "Failed to populate\n");
         } else {
             u->grid[row][colum] = true;
         }
     }
-    return true;
+    return false;
 }
 
 int uv_census(Universe *u, int r, int c) {
@@ -127,33 +130,33 @@ int uv_census(Universe *u, int r, int c) {
             neighboors += 1;
         }
     } else {
-        int r_1 = ((r - 1) + u->rows - 1) % u->rows;
-        int c_1 = ((c - 1) + u->cols - 1) % u->cols;
-        int r_plus_1 = ((r + 1) + u->rows - 1) % u->rows;
-        int c_plus_1 = ((c + 1) + u->cols - 1) % u->cols;
+        int r_1 = ((r - 1) + u->rows) % u->rows;
+        int c_1 = ((c - 1) + u->cols) % u->cols;
+        //  int r_plus_1 = ((r + 1) + u->rows - 1) % u->rows;
+        // int c_plus_1 = ((c + 1) + u->cols - 1) % u->cols;
         if (uv_get_cell(u, r_1, c_1) == true) {
             neighboors += 1;
         }
         if (uv_get_cell(u, r_1, c) == true) {
             neighboors += 1;
         }
-        if (uv_get_cell(u, r_1, c_plus_1) == true) {
+        if (uv_get_cell(u, r_1, c + 1) == true) {
             neighboors += 1;
         }
         if (uv_get_cell(u, r, c_1) == true) {
             neighboors += 1;
         }
 
-        if (uv_get_cell(u, r, c_plus_1) == true) {
+        if (uv_get_cell(u, r, c + 1) == true) {
             neighboors += 1;
         }
-        if (uv_get_cell(u, r_plus_1, c_1) == true) {
+        if (uv_get_cell(u, r + 1, c_1) == true) {
             neighboors += 1;
         }
-        if (uv_get_cell(u, r_plus_1, c) == true) {
+        if (uv_get_cell(u, r + 1, c) == true) {
             neighboors += 1;
         }
-        if (uv_get_cell(u, r_plus_1, c_plus_1) == true) {
+        if (uv_get_cell(u, r + 1, c + 1) == true) {
             neighboors += 1;
         }
     }
@@ -167,7 +170,12 @@ void uv_print(Universe *u, FILE *outfile) {
             } else {
                 fprintf(outfile, "%s", ".");
             }
+            // 	fprintf("\n");
+            //	fprintf(outfile, "%s", "\n");
         }
+        fprintf(outfile, "%s", "\n");
     }
+    //	fprintf("\n");
+    //	fprintf(outfile, "%s", "\n");
     return;
 }
