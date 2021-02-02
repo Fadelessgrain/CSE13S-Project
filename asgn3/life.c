@@ -113,6 +113,7 @@ int main(int argc, char **argv) {
                 }
                 count = 0;
             }
+            //swaps the universes each generation
             Universe *temp = a;
             a = b;
             b = temp;

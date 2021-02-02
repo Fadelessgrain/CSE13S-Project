@@ -54,13 +54,16 @@ int uv_cols(Universe *u) {
 }
 //if pointer or c are are >= the number of rows or cols and if pointer r or c <0,
 //then it's out of bounce and return false, else return true
+//code below is inpired by the proffesor's piazza post
 bool out_of_bounds(Universe *u, int r, int c) {
-    if (r >= u->rows || r < 0 || c >= u->cols || c < 0) {
+    if (r >= (u->rows - 1) || r <= 0 || c >= (u->cols - 1) || c <= 0) {
         return false;
     } else {
         return true;
     }
 }
+//code above is inpired by the proffesor's piazza post
+
 //if the pointer is in bounce, set the grid to true else nothing
 void uv_live_cell(Universe *u, int r, int c) {
     bool x = out_of_bounds(u, r, c);
@@ -76,10 +79,8 @@ void uv_dead_cell(Universe *u, int r, int c) {
     bool x = out_of_bounds(u, r, c);
     if (x == true) {
         u->grid[r][c] = false;
-        return;
-    } else {
-        return;
     }
+    return;
 }
 //checks if a cell is dead/alive
 bool uv_get_cell(Universe *u, int r, int c) {
@@ -87,12 +88,13 @@ bool uv_get_cell(Universe *u, int r, int c) {
     bool x = out_of_bounds(u, r, c);
     //if its out of bounce and the cell is dead, return false
     //give an error warning
-    if (x == false || u->grid[r][c] == false) {
-        return false;
+    if (x == true) {
+        //  return false;
+        return u->grid[r][c];
     }
     //if its in bound and the cell is alive, return true
     else {
-        return u->grid[r][c];
+        return false;
     }
     return true;
 }
@@ -117,10 +119,11 @@ bool uv_populate(Universe *u, FILE *infile) {
     return true;
 }
 //counts the neighboors
+//code below was inspired by Eugene's lab section
 int uv_census(Universe *u, int r, int c) {
     int neighboors = 0;
     //if not in toroidal, then don't do modulo and loop around (r,c)
-    if (u->toroidal == false) {
+    if (u->toroidal != true) {
         if (uv_get_cell(u, r - 1, c - 1) == true) {
             neighboors += 1;
         }
@@ -179,6 +182,7 @@ int uv_census(Universe *u, int r, int c) {
     //return the number of neighboors
     return neighboors;
 }
+//code above was inpired by Eugene's lab section
 //print a universe
 void uv_print(Universe *u, FILE *outfile) {
     //iterate through the rows
