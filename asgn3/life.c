@@ -108,17 +108,16 @@ int main(int argc, char **argv) {
                     //kill the cell
                     uv_dead_cell(b, r, c);
                 } else {
-					uv_get_cell(b, r,c);
-                //resets the counter for each generation
+                    uv_get_cell(b, r, c);
+                    //resets the counter for each generation
                 }
-				count = 0;
-}
+                count = 0;
+            }
             Universe *temp = a;
             a = b;
             b = temp;
             endwin();
-       
-	   }
+        }
     }
     //return the curses
     curs_set(TRUE);

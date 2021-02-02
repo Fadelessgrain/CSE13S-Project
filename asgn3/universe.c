@@ -121,26 +121,31 @@ int uv_census(Universe *u, int r, int c) {
     int neighboors = 0;
     //if not in toroidal, then don't do modulo and loop around (r,c)
     if (u->toroidal == false) {
-           if (uv_get_cell(u, r - 1, c - 1) == true) {
-             neighboors += 1;
-          }  if (uv_get_cell(u, r - 1, c) == true) {
+        if (uv_get_cell(u, r - 1, c - 1) == true) {
             neighboors += 1;
-          }  if (uv_get_cell(u, r - 1, c + 1) == true) {
+        }
+        if (uv_get_cell(u, r - 1, c) == true) {
             neighboors += 1;
-
-         }  if (uv_get_cell(u, r, c - 1) == true) {
-           neighboors += 1;
-         }
+        }
+        if (uv_get_cell(u, r - 1, c + 1) == true) {
+            neighboors += 1;
+        }
+        if (uv_get_cell(u, r, c - 1) == true) {
+            neighboors += 1;
+        }
 
         if (uv_get_cell(u, r, c + 1) == true) {
-         neighboors += 1;
-         }  if (uv_get_cell(u, r + 1, c - 1) == true) {
-           neighboors += 1;
-         }  if (uv_get_cell(u, r + 1, c) == true) {
-           neighboors += 1;
-         }  if (uv_get_cell(u, r + 1, c + 1) == true) {
-           neighboors += 1;
-         }
+            neighboors += 1;
+        }
+        if (uv_get_cell(u, r + 1, c - 1) == true) {
+            neighboors += 1;
+        }
+        if (uv_get_cell(u, r + 1, c) == true) {
+            neighboors += 1;
+        }
+        if (uv_get_cell(u, r + 1, c + 1) == true) {
+            neighboors += 1;
+        }
         //if in toroidal, do module to make sure there is no erros with %
     } else {
         int r_1 = ((r - 1) + u->rows) % u->rows;
