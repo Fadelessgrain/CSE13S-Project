@@ -55,7 +55,7 @@ int uv_cols(Universe *u) {
 //if pointer or c are are >= the number of rows or cols and if pointer r or c <0,
 //then it's out of bounce and return false, else return true
 bool out_of_bounds(Universe *u, int r, int c) {
-    if (r >= u->rows || r < 0 || c >= u->rows || c < 0) {
+    if (r >= u->rows || r < 0 || c >= u->cols || c < 0) {
         return false;
     } else {
         return true;
@@ -85,35 +85,28 @@ void uv_dead_cell(Universe *u, int r, int c) {
 bool uv_get_cell(Universe *u, int r, int c) {
     //check if the cell is in bound
     bool x = out_of_bounds(u, r, c);
-    //check if we are in toroidal
-    if (u->toroidal != false) {
-        //if its out of bounce and the cell is dead, return false
-        if (x == false || u->grid[r][c] == false) {
-            return false;
-        }
-        //if its in bound and the cell is alive, return true
-        if (x == true || u->grid[r][c] == true) {
-            return true;
-        }
-        //if not in toroidal, return the value of the cell
-    } else {
+    //if its out of bounce and the cell is dead, return false
+    //give an error warning
+    if (x == false || u->grid[r][c] == false) {
+        return false;
+    }
+    //if its in bound and the cell is alive, return true
+    else {
         return u->grid[r][c];
     }
-    return u->grid[r][c];
+    return true;
 }
 //populate the universe
 bool uv_populate(Universe *u, FILE *infile) {
     int row = 0;
     int colum = 0;
-    //if the first file is scanned for the dimention
-    bool dim = false;
-    //scan the file until you reach the end
+    //scan the file until you reach the end but first scan the dementions
+    fscanf(infile, "\n");
     while (fscanf(infile, "%d %d\n", &row, &colum) != EOF) {
         //we read the dimentions
-        dim = true;
         //if it's out f bounce failed to populate
-        int x = out_of_bounds(u, row, colum);
-        if (x == false && dim == true) {
+        bool x = out_of_bounds(u, row, colum);
+        if (x == false) {
             return false;
             fprintf(stderr, "Failed to populate\n");
             //else populate the grid
@@ -128,32 +121,26 @@ int uv_census(Universe *u, int r, int c) {
     int neighboors = 0;
     //if not in toroidal, then don't do modulo and loop around (r,c)
     if (u->toroidal == false) {
-        if (uv_get_cell(u, r - 1, c - 1) == true) {
+           if (uv_get_cell(u, r - 1, c - 1) == true) {
+             neighboors += 1;
+          }  if (uv_get_cell(u, r - 1, c) == true) {
             neighboors += 1;
-        }
-        if (uv_get_cell(u, r - 1, c) == true) {
+          }  if (uv_get_cell(u, r - 1, c + 1) == true) {
             neighboors += 1;
-            printf("second one %d", neighboors);
-        }
-        if (uv_get_cell(u, r - 1, c + 1) == true) {
-            neighboors += 1;
-        }
-        if (uv_get_cell(u, r, c - 1) == true) {
-            neighboors += 1;
-        }
+
+         }  if (uv_get_cell(u, r, c - 1) == true) {
+           neighboors += 1;
+         }
 
         if (uv_get_cell(u, r, c + 1) == true) {
-            neighboors += 1;
-        }
-        if (uv_get_cell(u, r + 1, c - 1) == true) {
-            neighboors += 1;
-        }
-        if (uv_get_cell(u, r + 1, c) == true) {
-            neighboors += 1;
-        }
-        if (uv_get_cell(u, r + 1, c + 1) == true) {
-            neighboors += 1;
-        }
+         neighboors += 1;
+         }  if (uv_get_cell(u, r + 1, c - 1) == true) {
+           neighboors += 1;
+         }  if (uv_get_cell(u, r + 1, c) == true) {
+           neighboors += 1;
+         }  if (uv_get_cell(u, r + 1, c + 1) == true) {
+           neighboors += 1;
+         }
         //if in toroidal, do module to make sure there is no erros with %
     } else {
         int r_1 = ((r - 1) + u->rows) % u->rows;
@@ -198,7 +185,7 @@ void uv_print(Universe *u, FILE *outfile) {
                 fprintf(outfile, "%s", "o");
             }
             //if it is dead, print a .
-            if (u->grid[i][t] == false) {
+            else {
                 fprintf(outfile, "%s", ".");
             }
         }

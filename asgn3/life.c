@@ -10,8 +10,6 @@
 #define DELAY 50000
 
 int main(int argc, char **argv) {
-    int rows = 0;
-    int cols = 0;
     int opt = 0;
     //set the standard file
     FILE *infile = stdin;
@@ -62,76 +60,76 @@ int main(int argc, char **argv) {
         }
     }
     //read the file
+    int rows = 0;
+    int cols = 0;
     fscanf(infile, "%d %d\n", &rows, &cols);
     //create universe a
     Universe *a = uv_create(rows, cols, toroidal);
-    //make sure that you have a valid memory
-    if (a == NULL) {
-        fprintf(stderr, "Allocation failed\n");
-        return false;
-    }
     //create universe b
     Universe *b = uv_create(rows, cols, toroidal);
-    //make sure that you have a valid memory
-    if (b == NULL) {
-        fprintf(stderr, "Allocation failed\n");
-        return false;
-    }
     uv_populate(a, infile);
-    //counter that will be used to check the 3 conditions to see if a cell is alive/dead
+    //counter that will be used to check the 3 conditions
+    //to see if a cell is alive/dead
     int count = 0;
     //sets the screen for curses
-    initscr();
-    noecho();
-    curs_set(FALSE);
+    if (r_s == true) {
+        initscr();
+        noecho();
+        curs_set(FALSE);
+    }
     //generate through the generations
-    for (int i = 0; i < generation; i++) {
+    for (int i = 0; i < generation; i += 1) {
         //generate through the rows
-        for (int r = 0; r < rows; r++) {
-            //generate through the cols
-            for (int c = 0; c < cols; c++) {
-                //set our counter to the amount of neighboors in universe a
-                count = uv_census(a, r, c);
-                //if the cell has 3 or 2 neighboors, it stays alive
-                if (count == 2 || count == 3) {
-                    uv_live_cell(b, r, c);
-                    //does the ncurser
-                    if (r_s != false) {
-                        clear();
+        for (int r = 0; r < rows; r += 1) {
+            //igenerate through the cols
+            for (int c = 0; c < cols; c += 1) {
+                //print the ncurses
+                if (r_s == true) {
+                    clear();
+                    if ((uv_get_cell(a, r, c) == true)) {
                         mvprintw(r, c, "o");
                         refresh();
                         usleep(DELAY);
                     }
                 }
+                //gets the number of neighboors
+                count = uv_census(a, r, c);
+                //gets the value of a cell
                 bool x = uv_get_cell(a, r, c);
+                if (x == true && (count == 2 || count == 3)) {
+                    uv_live_cell(b, r, c);
+                }
                 //if there is a dead cell with three neighboors, make the cell alive
                 if (x == false && count == 3) {
                     uv_live_cell(b, r, c);
-                    //does the ncurses
-                    if (r_s != false) {
-                        clear();
-                        mvprintw(r, c, "o");
-                        refresh();
-                        usleep(DELAY);
-                    }
-                } else {
+                }
+
+                if (count < 2 || count > 2) {
                     //kill the cell
                     uv_dead_cell(b, r, c);
+                } else {
+					uv_get_cell(b, r,c);
+                //resets the counter for each generation
                 }
-                //swaping the universes
-                Universe *temp = a;
-                a = b;
-                b = temp;
-            }
-        }
+				count = 0;
+}
+            Universe *temp = a;
+            a = b;
+            b = temp;
+            endwin();
+       
+	   }
     }
-    //stop the curser
-    endwin();
-    //print a
+    //return the curses
+    curs_set(TRUE);
+    //print universe a
     uv_print(a, outfile);
-    //delete universe b
-    uv_delete(b);
     //delete universe a
     uv_delete(a);
+    //delete universe b
+    uv_delete(b);
+    //closes both files
+    fclose(infile);
+    fclose(outfile);
     return 0;
 }
