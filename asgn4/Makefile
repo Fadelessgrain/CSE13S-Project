@@ -16,6 +16,6 @@ format:
 	clang-format -i --style=file *.[ch]
 
 clean:
-	rm -f vampire vampire.o
+	rm -f gen dec err *.o
 
 
