@@ -54,26 +54,32 @@ uint32_t bm_cols(BitMatrix *m) {
 }
 
 void bm_set_bit(BitMatrix *m, uint32_t r, uint32_t c) {
-    uint8_t maks = 1 << (c % 8);
-    m->mat[r][c / 8] = m->mat[r][c / 8] || maks;
+    uint32_t col = ((c % 8)/8);
+    uint32_t mask = 1 << (col);
+    m->mat[r][c] = (m->mat[r][c/8])|mask;
+    printf("setting %d\n", m->mat[r][c]);
     return;
 }
 
 void bm_clr_bit(BitMatrix *m, uint32_t r, uint32_t c) {
-    uint8_t maks = ~(1 << (c % 8));
-    m->mat[r][c / 8] = m->mat[r][c / 8] && maks;
+    uint32_t mask = ~(1 << (c % 8)/8);
+    m->mat[r][c/8] = m->mat[r][c/8] & mask;
     return;
 }
 
 uint8_t bm_get_bit(BitMatrix *m, uint32_t r, uint32_t c) {
-    uint8_t maks = 1 << (c % 8);
-    m->mat[r][c / 8] = m->mat[r][c / 8] && maks;
-    return m->mat[r][c / 8] >> (c % 8);
+    uint32_t col = ((c % 8)/8);
+    uint32_t mask = 1 << (col);
+    m->mat[r][c/8] = m->mat[r][c/8] & mask;
+    m->mat[r][c/8] = m->mat[r][c/8] >> col;
+    printf("get bit %d\n", m->mat[r][c/8]);
+    return m->mat[r][c];
 }
 
 void bm_print(BitMatrix *m) {
     for (uint32_t i = 0; i < m->rows; i += 1) {
         for (uint32_t j = 0; j < m->cols; j += 1) {
+            //	uint32_t x = bm_get_bit(m, i, j);
             printf("%d\t", m->mat[i][j]);
         }
         printf("\n");
