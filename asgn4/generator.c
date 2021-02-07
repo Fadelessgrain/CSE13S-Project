@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <unistd.h>
-
 #define OPTIONS "i:o:"
 
 //Returns the lower nibble of val
@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
     FILE *infile = stdin;
     //set the standard file to print to
     FILE *outfile = stdout;
+    //struct used to gte the correct permisions
     struct stat buf;
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
@@ -48,28 +49,40 @@ int main(int argc, char **argv) {
                 exit(1);
             }
             break;
-        //		   fstat(fileno(infile), &buf);
-        //		   fchmod(fileno(outfile), buf .st_mode);
+            //gets the correct permisioons for the input and output file
+            fstat(fileno(infile), &buf);
+            fchmod(fileno(outfile), buf.st_mode);
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
+    //init G and H_T matrices
     ham_init();
-    fstat(fileno(infile), &buf);
-    fchmod(fileno(outfile), buf.st_mode);
-
+    //read the files
     while (fgetc(infile) != EOF) {
+        //get a byyte from the file
         uint8_t code = fgetc(infile);
+        //get the lowe nibble from the byte
         uint8_t low_code = lower_nibble(code);
+        //get the upper nibble from the byte
         uint8_t high_code = upper_nibble(code);
+        //stores the encoded data
         uint8_t low_nibble;
-        ham_encode(low_code, &low_nibble);
+        //passes the pointer to encode function
+        uint8_t *result = &low_nibble;
+        //calls the ecnode function
+        ham_encode(low_code, result);
+        //stores upper nibble's encoded data
         uint8_t high_nibble;
-        ham_encode(high_code, &high_nibble);
-
+        //passes the pointer to the encode function
+        uint8_t *result2 = &high_nibble;
+        //calls the encode function
+        ham_encode(high_code, result2);
+        //prints out the lower nibble
         fputc(low_nibble, outfile);
-        fputc(high_code, outfile);
+        //prints out the upper nibble
+        fputc(high_nibble, outfile);
     }
-
+    //frees the memory
     ham_destroy();
     fclose(infile);
     fclose(outfile);
