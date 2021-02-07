@@ -4,16 +4,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-//typedef enum ham_rc {
-//HAM_ERR= -1,
-//HAM_OK= 0,
-//HAM_ERR_OK = 1
-//} ham_rc ;
-
+#include <string.h>
 static BitMatrix *G = NULL;
 static BitMatrix *H = NULL;
-static BitMatrix *m;
 
 ham_rc ham_init(void) {
     G = bm_create(4, 8);
@@ -62,39 +55,21 @@ void ham_destroy(void) {
     return;
 }
 
-//void conver(int *a, int size, int num) {
-//		for (int i = 0; i < size
-
-//}
-
 ham_rc ham_encode(uint8_t data, uint8_t *code) {
-//	ham_init();
-	m = bm_create(0, 4);
-	for (uint8_t i = 0; i < 8; i += 1, data /=10) {
-		bm_set_bit(m, i, 0);
-	//	return m;
-	}
-	if (ham_init() == HAM_ERR) {
-	return HAM_ERR;
-	}else {
-		for(uint8_t i = 0; i < bm_rows(G); i += 1) {
-		for(uint8_t j = 0; j < bm_cols(G); j +=1) {
-			for(uint8_t k = 0; k < 8; k += 1) {
-			code[i][j] &= (**m)[i][j] ^ G[k][j]
-			//	data+= code->mat[i][k] * (*G)->mat[k][j];
-		//	uint8_t x =(*m)^ (*G);
-			}
-		}
-//	printf("%d", data);
-//	printf("%s", code);
-	}
-
-
-	//printf("%d", data);
-//	ham_destory();
-	return HAM_OK;
-	}
+    if (ham_init() == HAM_ERR) {
+        return HAM_ERR;
+    } else {
+        for (uint8_t i = 0; i < bm_rows(G); i += 1) {
+            for (uint8_t j = 0; j < 1; j += 1) {
+                for (uint8_t k = 0; k < bm_cols(G); k += 1) {
+                    uint8_t y = 0;
+                    uint8_t x = bm_get_bit(G, i, j);
+                    uint8_t z = (x & data);
+                    y = (*code) ^ z;
+                    *code = y;
+                }
+            }
+        }
+    }
+    return HAM_OK;
 }
-//ham_rc ham_decode(uint8_t code, uint8_t *data) {
-
-//}
