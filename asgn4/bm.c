@@ -18,23 +18,14 @@ typedef struct BitMatrix {
 BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
     //allocate memories for the structure
     BitMatrix *m = (BitMatrix *) calloc(1, sizeof(BitMatrix));
-    if (m == NULL) {
-        return NULL;
-    }
     m->rows = rows;
     m->cols = cols;
     //allocates memories for the mat
     m->mat = (uint8_t **) calloc(rows, sizeof(uint8_t *));
-    if (m->mat == NULL) {
-        return NULL;
-    }
     //allocates memories for the cols
     uint32_t num_byte = (cols / 8 == 0) ? (cols / 8) : (cols / 8) + 1;
     for (uint32_t r = 0; r < rows; r += 1) {
         m->mat[r] = (uint8_t *) calloc(num_byte, sizeof(uint8_t));
-        if (m->mat[r] == NULL) {
-            return NULL;
-        }
     }
 
     return m;
