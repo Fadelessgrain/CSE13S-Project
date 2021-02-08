@@ -61,25 +61,20 @@ int main(int argc, char **argv) {
     //get a byte from the file and loop until -1
     int code;
     while ((code = fgetc(infile)) != EOF) {
-        //		printf("%d\t", code);
         //get the lowe nibble from the byte
         uint8_t low_code = lower_nibble(code);
         //get the upper nibble from the byte
-        //		printf("%u\n\t", low_code);
         uint8_t high_code = upper_nibble(code);
-        //       printf("%u\n\t", low_code);
         //stores the encoded data
-        uint8_t low_nibble = 0;
+        uint8_t low_nibble;
         //passes the pointer to encode function
-        uint8_t *result = &low_nibble;
         //calls the ecnode function
-        ham_encode(low_code, result);
+        ham_encode(low_code, &low_nibble);
         //stores upper nibble's encoded data
-        uint8_t high_nibble = 0;
+        uint8_t high_nibble;
         //passes the pointer to the encode function
-        uint8_t *result2 = &high_nibble;
         //calls the encode function
-        ham_encode(high_code, result2);
+        ham_encode(high_code, &high_nibble);
         //prints out the lower nibble
         fputc(low_nibble, outfile);
         //prints out the upper nibble
