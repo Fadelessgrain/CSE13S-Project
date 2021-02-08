@@ -10,7 +10,7 @@
 
 //Returns the lower nibble of val
 uint8_t lower_nibble(uint8_t val) {
-    return val & 0xF;
+    return val & (0xF);
 }
 // Returns the upper nibble of val
 uint8_t upper_nibble(uint8_t val) {
@@ -20,7 +20,7 @@ uint8_t upper_nibble(uint8_t val) {
 uint8_t pack_byte(uint8_t upper, uint8_t lower) {
     return (upper << 4) | (lower & 0xF);
 }
-//struct stat buf;
+
 int main(int argc, char **argv) {
     int opt = 0;
     //set the standard file
@@ -58,21 +58,24 @@ int main(int argc, char **argv) {
     //init G and H_T matrices
     ham_init();
     //read the files
-    while (fgetc(infile) != EOF) {
-        //get a byyte from the file
-        uint8_t code = fgetc(infile);
+    //get a byte from the file and loop until -1
+    int code;
+    while ((code = fgetc(infile)) != EOF) {
+        //		printf("%d\t", code);
         //get the lowe nibble from the byte
         uint8_t low_code = lower_nibble(code);
         //get the upper nibble from the byte
+        //		printf("%u\n\t", low_code);
         uint8_t high_code = upper_nibble(code);
+        //       printf("%u\n\t", low_code);
         //stores the encoded data
-        uint8_t low_nibble;
+        uint8_t low_nibble = 0;
         //passes the pointer to encode function
         uint8_t *result = &low_nibble;
         //calls the ecnode function
         ham_encode(low_code, result);
         //stores upper nibble's encoded data
-        uint8_t high_nibble;
+        uint8_t high_nibble = 0;
         //passes the pointer to the encode function
         uint8_t *result2 = &high_nibble;
         //calls the encode function

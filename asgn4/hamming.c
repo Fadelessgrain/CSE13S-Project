@@ -9,7 +9,6 @@
 //'creates' the G and H_T matrices
 static BitMatrix *G = NULL;
 static BitMatrix *H = NULL;
-
 //sets the values inside the G and H_T matrices
 ham_rc ham_init(void) {
     G = bm_create(4, 8);
@@ -46,6 +45,7 @@ ham_rc ham_init(void) {
     bm_set_bit(H, 5, 1);
     bm_set_bit(H, 6, 2);
     bm_set_bit(H, 7, 3);
+    //    bm_print(R);
     //if creating either one fails, return ham_err
     if (G == NULL || H == NULL) {
         return HAM_ERR;
@@ -63,6 +63,8 @@ void ham_destroy(void) {
 //enocdes a nibble at a time and stores it in a pointer
 ham_rc ham_encode(uint8_t data, uint8_t *code) {
     //if init Gor H_T fails, return error
+    *code = data << 4;
+
     if (ham_init() == HAM_ERR) {
         return HAM_ERR;
     } else {
@@ -76,12 +78,13 @@ ham_rc ham_encode(uint8_t data, uint8_t *code) {
                     uint8_t y = 0;
                     //get the bit at the specific location
                     uint8_t x = bm_get_bit(G, j, k);
+                    // y = (data | *code) >> 1;
                     //times the bit by data
                     uint8_t z = (x & data);
                     //add the bits toegther
                     y = (y) ^ z;
                     //send that result to the pointer
-                    *code = y;
+                    *code = z;
                 }
             }
         }
