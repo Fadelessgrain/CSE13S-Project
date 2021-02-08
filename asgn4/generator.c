@@ -49,14 +49,14 @@ int main(int argc, char **argv) {
                 exit(1);
             }
             break;
-            //gets the correct permisioons for the input and output file
-            fstat(fileno(infile), &buf);
-            fchmod(fileno(outfile), buf.st_mode);
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
     //init G and H_T matrices
     ham_init();
+    //gets the correct permisioons for the input and output file
+    fstat(fileno(infile), &buf);
+    fchmod(fileno(outfile), buf.st_mode);
     //read the files
     //get a byte from the file and loop until -1
     int code;
