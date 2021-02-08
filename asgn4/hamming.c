@@ -60,6 +60,7 @@ void ham_destroy(void) {
     return;
 }
 //enocdes a nibble at a time and stores it in a pointer
+//code below inspired by Sahiri's lab section
 ham_rc ham_encode(uint8_t data, uint8_t *code) {
     //if init Gor H_T fails, return error
     *code = data << 4;
@@ -91,6 +92,8 @@ ham_rc ham_encode(uint8_t data, uint8_t *code) {
     //else return ok
     return HAM_OK;
 }
+//code abve inspired by sahiri's lab section
+
 //decodes a message
 ham_rc ham_decode(uint8_t code, uint8_t *data) {
     for (uint8_t i = 0; i < bm_rows(G); i += 1) {
