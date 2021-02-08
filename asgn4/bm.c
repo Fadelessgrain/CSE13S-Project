@@ -14,6 +14,7 @@ typedef struct BitMatrix {
 
 } BitMatrix;
 //allocates memory for a bit matrix
+//code below inspired by Shahiti's Lab section
 BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
     //allocate memories for the structure
     BitMatrix *m = (BitMatrix *) calloc(1, sizeof(BitMatrix));
@@ -38,6 +39,7 @@ BitMatrix *bm_create(uint32_t rows, uint32_t cols) {
 
     return m;
 }
+//code above inspired by Shahiti's Lab section
 //frees the memory allocated
 void bm_delete(BitMatrix **m) {
     //free the cols
@@ -62,9 +64,8 @@ uint32_t bm_cols(BitMatrix *m) {
 //sets specific locations in the bit mat as 1
 void bm_set_bit(BitMatrix *m, uint32_t r, uint32_t c) {
     //makes sure we are in the corrent index (0,-7)
-    uint32_t col = ((c % 8) / 8);
     //shifts by the cols
-    uint32_t mask = 1 << (col);
+    uint32_t mask = 1 << ((c % 8) / 8);
     //ors the byte with the shift we did to set 1s
     m->mat[r][c] = (m->mat[r][c / 8]) | mask;
     return;
@@ -80,13 +81,12 @@ void bm_clr_bit(BitMatrix *m, uint32_t r, uint32_t c) {
 //gets the bit mat value from a specific location
 uint8_t bm_get_bit(BitMatrix *m, uint32_t r, uint32_t c) {
     //makes sure we are in the corrent index (0,-7)
-    uint32_t col = ((c % 8) / 8);
     //shifts by the column
-    uint32_t mask = 1 << (col);
+    uint32_t mask = 1 << ((c % 8) / 8);
     //we and m with the shift to check which ones are 1s or 0s
     m->mat[r][c / 8] = m->mat[r][c / 8] & mask;
     //shift it back again
-    m->mat[r][c / 8] = m->mat[r][c / 8] >> col;
+    m->mat[r][c / 8] = m->mat[r][c / 8] >> ((c % 8) / 8);
     //return what's in the grid
     return m->mat[r][c];
 }
@@ -94,8 +94,8 @@ uint8_t bm_get_bit(BitMatrix *m, uint32_t r, uint32_t c) {
 void bm_print(BitMatrix *m) {
     for (uint32_t i = 0; i < m->rows; i += 1) {
         for (uint32_t j = 0; j < m->cols; j += 1) {
-            uint32_t print = bm_get_bit(m, i, j);
-            printf("%u\t", print);
+            //     uint32_t x = bm_get_bit(m, i, j);
+            printf("%d\t", m->mat[i][j]);
         }
         printf("\n");
     }
