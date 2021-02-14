@@ -3,12 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef uint32_t Set;
-uint32_t bubbles = 0;
-uint32_t shell = 1;
-uint32_t quick = 2;
-uint32_t heap = 3;
-
 Set set_empty(void) {
     return 0;
 }
