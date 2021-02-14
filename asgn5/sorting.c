@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     // uint32_t moves = 0;
     //   uint32_t compare = 0;
     Set s = set_empty();
-    while ((opt = getopt(argc, argv, OPTIONS)) != 1) {
+    while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'a':
             s = set_insert(s, 0); //buubles
@@ -34,7 +34,9 @@ int main(int argc, char **argv) {
         case 'r': seed = atoi(optarg); break;
         case 'p': print = atoi(optarg); break;
         case 'n': size = atoi(optarg); break;
-        }
+        default: 
+		printf("error");
+		}
     }
     srandom(seed);
     //	uint32_t *A = NULL;
