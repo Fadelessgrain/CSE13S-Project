@@ -11,7 +11,7 @@ format:
 	clang-format -i --style=file *.[ch]
 
 valgrind: all
-	valgrind --leak-check=full --show-leak-kinds=all -s ./sorting
+	valgrind --leak-check=full --show-leak-kinds=all -s ./sorting -b -n 1000 -p 0
 clean:
 	rm -f sorting *.o
 
