@@ -34,20 +34,17 @@ int main(int argc, char **argv) {
         case 'r': seed = atoi(optarg); break;
         case 'p': print = atoi(optarg); break;
         case 'n': size = atoi(optarg); break;
-        default: 
-		printf("error");
-		}
+        default: printf("error");
+        }
     }
     srandom(seed);
-    //	uint32_t *A = NULL;
-    //	uint32_t *A = malloc(size * sizeof(uint32_t));
-    uint32_t A[size];
-    uint32_t B[size];
-    uint32_t C[size];
-    uint32_t D[size];
-    // uint32_t *B = malloc(size * sizeof(uint32_t));
-    //	uint32_t *C = malloc(size * sizeof(uint32_t));
-    //uint32_t *D = malloc(size * sizeof(uint32_t));
+    if (print > size) {
+        print = size;
+    }
+    uint32_t *A = malloc(size * sizeof(uint32_t));
+    uint32_t *B = malloc(size * sizeof(uint32_t));
+    uint32_t *C = malloc(size * sizeof(uint32_t));
+    uint32_t *D = malloc(size * sizeof(uint32_t));
 
     for (uint32_t i = 0; i < size; i += 1) {
         uint32_t masked_valued = random();
@@ -60,40 +57,61 @@ int main(int argc, char **argv) {
     if (set_member(s, 0) == true) {
         bubble_sort(A, size);
         printf("Bubble Sort\n");
-        printf("%u elements, moves, compares\n", size);
+        printf("%u elements, moves, compares", size);
         // moves = 0;
         // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
+            if (i % 5 == 0) {
+                printf("\n");
+            }
             printf("%13" PRIu32, A[i]);
         }
         printf("\n");
     }
     if (set_member(s, 1) == true) {
         shell_sort(B, size);
+        printf("Bubble Sort\n");
+        printf("%u elements, moves, compares", size);
+        // moves = 0;
+        // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
-            printf("Shell Sort\n");
+            if (i % 5 == 0) {
+                printf("\n");
+            }
             printf("%13" PRIu32, B[i]);
         }
         printf("\n");
     }
     if (set_member(s, 2) == true) {
         quick_sort(C, size);
+        printf("Quick Sort\n");
+        printf("%u elements, moves, compares", size);
+        // moves = 0;
+        // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
-            printf("Bubble Sort\n");
+            if (i % 5 == 0) {
+                printf("\n");
+            }
             printf("%13" PRIu32, C[i]);
         }
         printf("\n");
     }
     if (set_member(s, 3) == true) {
         heap_sort(D, size);
+        printf("Heap Sort\n");
+        printf("%u elements, moves, compares", size);
+        // moves = 0;
+        // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
-            printf("Bubble Sort\n");
+            if (i % 5 == 0) {
+                printf("\n");
+            }
             printf("%13" PRIu32, D[i]);
         }
         printf("\n");
     }
-    //	free(A);
-    //	free(B);
-    //	free(C);
-    //	free(D);
+    free(A);
+    free(B);
+    free(C);
+    free(D);
 }
