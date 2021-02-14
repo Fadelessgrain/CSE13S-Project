@@ -14,7 +14,8 @@ void bubble_sort(uint32_t *A, uint32_t n) {
                 A[i - 1] = temp;
                 swapped = true;
             }
-            n -= 1;
         }
+		n -=1;
+
     }
 }
