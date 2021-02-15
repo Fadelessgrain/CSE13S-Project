@@ -33,12 +33,15 @@ int main(int argc, char **argv) {
         case 'r': seed = atoi(optarg); break;
         case 'p': print = atoi(optarg); break;
         case 'n': size = atoi(optarg); break;
-        default: printf("error");
+        default: printf("Error, please enter a valid option");
         }
     }
     srandom(seed);
     if (print > size) {
         print = size;
+    }
+    if (!set_member(s, 0) && !set_member(s, 1) && !set_member(s, 2) && !set_member(s, 3)) {
+        printf("Select at least one sort to perform\n");
     }
 
     uint32_t *A = malloc(size * sizeof(uint32_t));
