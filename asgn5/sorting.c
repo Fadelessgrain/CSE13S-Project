@@ -59,7 +59,6 @@ int main(int argc, char **argv) {
         uint32_t moves = move() - 3;
         uint32_t compares = compare() - 1;
         refresh(moves, compares);
-        printf("moves_from_b: %u moves", moves);
         printf("Bubble Sort\n");
         printf("%u elements, %u moves, %u compares", size, moves, compares);
 
@@ -78,8 +77,6 @@ int main(int argc, char **argv) {
         uint32_t c = compare() - 1;
         refresh(m, c);
         printf("%u elements, %u moves, %u compares", size, m, c);
-        // moves = 0;
-        // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
             if (i % 5 == 0) {
                 printf("\n");
@@ -95,8 +92,6 @@ int main(int argc, char **argv) {
         uint32_t c = compare() - 1;
         refresh(m, c);
         printf("%u elements, %u moves, %u compares", size, m, c);
-        // moves = 0;
-        // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
             if (i % 5 == 0) {
                 printf("\n");

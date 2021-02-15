@@ -7,7 +7,7 @@ Set set_empty(void) {
     return 0;
 }
 bool set_member(Set s, uint8_t x) {
-    uint32_t mask = 1 << (x % 32);
+    uint32_t mask = 1 << (x);
     uint32_t result = s & mask;
     return result >> (x % 32);
 }
