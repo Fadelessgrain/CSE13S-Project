@@ -37,10 +37,8 @@ void quick_sort(uint32_t *A, uint32_t n) {
     stack_push(s, right);
 
     while (!stack_empty(s)) {
-        uint32_t hi = 0;
-        hi = stack_pop(s, &left);
-        uint32_t lo = 0;
-        lo = stack_pop(s, &right);
+        stack_pop(s, &left);
+        stack_pop(s, &right);
         uint32_t p = particion(A, left, right);
         if (p + 1 < right) {
             stack_push(s, p + 1);
