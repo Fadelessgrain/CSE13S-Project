@@ -4,6 +4,7 @@
 #include "set.h"
 #include "shell.h"
 #include "stack.h"
+#include "statistics.h"
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -16,8 +17,6 @@ int main(int argc, char **argv) {
     uint32_t seed = 7092016;
     uint32_t size = 100;
     uint32_t print = 100;
-    // uint32_t moves = 0;
-    //   uint32_t compare = 0;
     Set s = set_empty();
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
@@ -41,6 +40,7 @@ int main(int argc, char **argv) {
     if (print > size) {
         print = size;
     }
+
     uint32_t *A = malloc(size * sizeof(uint32_t));
     uint32_t *B = malloc(size * sizeof(uint32_t));
     uint32_t *C = malloc(size * sizeof(uint32_t));
@@ -56,10 +56,13 @@ int main(int argc, char **argv) {
     }
     if (set_member(s, 0) == true) {
         bubble_sort(A, size);
+        uint32_t moves = move() - 3;
+        uint32_t compares = compare() - 1;
+        refresh(moves, compares);
+        printf("moves_from_b: %u moves", moves);
         printf("Bubble Sort\n");
-        printf("%u elements, moves, compares", size);
-        // moves = 0;
-        // compare = 0;
+        printf("%u elements, %u moves, %u compares", size, moves, compares);
+
         for (uint32_t i = 0; i < print; i += 1) {
             if (i % 5 == 0) {
                 printf("\n");
@@ -70,8 +73,11 @@ int main(int argc, char **argv) {
     }
     if (set_member(s, 1) == true) {
         shell_sort(B, size);
-        printf("Bubble Sort\n");
-        printf("%u elements, moves, compares", size);
+        printf("Shell Sort\n");
+        uint32_t m = move() - 3;
+        uint32_t c = compare() - 1;
+        refresh(m, c);
+        printf("%u elements, %u moves, %u compares", size, m, c);
         // moves = 0;
         // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
@@ -85,7 +91,10 @@ int main(int argc, char **argv) {
     if (set_member(s, 2) == true) {
         quick_sort(C, size);
         printf("Quick Sort\n");
-        printf("%u elements, moves, compares", size);
+        int32_t m = move() - 3;
+        uint32_t c = compare() - 1;
+        refresh(m, c);
+        printf("%u elements, %u moves, %u compares", size, m, c);
         // moves = 0;
         // compare = 0;
         for (uint32_t i = 0; i < print; i += 1) {
@@ -99,9 +108,10 @@ int main(int argc, char **argv) {
     if (set_member(s, 3) == true) {
         heap_sort(D, size);
         printf("Heap Sort\n");
-        printf("%u elements, moves, compares", size);
-        // moves = 0;
-        // compare = 0;
+        int32_t m = move() - 3;
+        uint32_t c = compare() - 1;
+        refresh(m, c);
+        printf("%u elements, %u moves, %u compares", size, m, c);
         for (uint32_t i = 0; i < print; i += 1) {
             if (i % 5 == 0) {
                 printf("\n");
