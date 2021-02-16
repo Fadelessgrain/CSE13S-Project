@@ -11,10 +11,7 @@ uint32_t max_child(uint32_t *A, uint32_t first, uint32_t last) {
     uint32_t left = 2 * first;
     uint32_t right = left + 1;
     // compares the index
-    if (A[right - 1] > A[left - 1]) {
-        // increment counter for compare
-        compare();
-    }
+    compare();
     // checks to see which child / element is the largest
     if (right <= last && A[right - 1] > A[left - 1]) {
         compare();
