@@ -10,7 +10,6 @@ struct Stack {
     int64_t *items;
 };
 
-
 // allocates memory for the stack
 Stack *stack_create(void) {
     Stack *S = (Stack *) calloc(1, sizeof(Stack));
@@ -37,32 +36,33 @@ bool stack_empty(Stack *s) {
     }
 }
 
+// code below inspired by Euegene's section
 // pushes a value into the stack
 bool stack_push(Stack *s, int64_t x) {
-   // if the stack has no memory, reallocate new memory
-   if (s->top == s->capacity) {
+    // if the stack has no memory, reallocate new memory
+    if (s->top == s->capacity) {
         s->capacity = (s->capacity) * 2;
-        s->items = (int64_t *) realloc(s->items, s->capacity * 
-		sizeof(int64_t));
+        s->items = (int64_t *) realloc(s->items, s->capacity * sizeof(int64_t));
     }
-	// pushes value to the top
+    // pushes value to the top
     s->items[s->top] = x;
     s->top += 1;
-	// checks to see if the allocation was succesful
+    // checks to see if the allocation was succesful
     if (s->items == NULL) {
         return false;
     } else {
         return true;
     }
 }
+// code above inspired by Euegen's section
 
 // pops element from the stack
 bool stack_pop(Stack *s, int64_t *x) {
-    // checks to see if the stack is empty 
-	if (s->top == 0) {
+    // checks to see if the stack is empty
+    if (s->top == 0) {
         return false;
     } else {
-		// defeferences x and pops elements from stack
+        // defeferences x and pops elements from stack
         s->top -= 1;
         *x = s->items[s->top];
         return true;
