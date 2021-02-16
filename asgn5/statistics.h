@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-uint32_t move(void);
-uint32_t compare(void);
-uint32_t refresh(uint32_t m, uint32_t c);
-uint32_t comparison(uint32_t *a, uint32_t temp, uint32_t x);
+uint64_t move(void);
+uint64_t compare(void);
+uint64_t refresh(uint64_t m);
+uint64_t refresh2(uint64_t c);
 #endif
