@@ -1,5 +1,7 @@
 #include "bubble.h"
+
 #include "statistics.h"
+
 #include <stdbool.h>
 
 // implrements the bubble alorithm

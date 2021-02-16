@@ -3,21 +3,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// creates an empty set 
+// creates an empty set
 Set set_empty(void) {
     return 0;
 }
 
-// checks to see if an element  has been set by shifting it in tha range of 
+// checks to see if an element  has been set by shifting it in tha range of
 // % 32 and then & the result in the set to find whoch ones are set,
-// the shits it again to get the element 
+// the shits it again to get the element
 bool set_member(Set s, uint8_t x) {
     uint32_t mask = 1 << (x);
     uint32_t result = s & mask;
     return result >> (x % 32);
 }
 
-// inserts / sets an element 
+// inserts / sets an element
 // shifts x by % 32 to stay in range, ors the shift with the set to insert
 // a new element
 Set set_insert(Set s, uint8_t x) {
@@ -33,7 +33,7 @@ Set set_remove(Set s, uint8_t x) {
 Set set_intersect(Set s, Set t) {
     return s & t;
 }
-// returns the union of two sets 
+// returns the union of two sets
 Set set_union(Set s, Set t) {
     return s | t;
 }
@@ -42,7 +42,6 @@ Set set_union(Set s, Set t) {
 Set set_complement(Set s) {
     return ~s;
 }
-
 
 // returns what two sets have in difference
 Set set_difference(Set s, Set t) {

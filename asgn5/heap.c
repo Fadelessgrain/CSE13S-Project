@@ -1,5 +1,7 @@
 #include "heap.h"
+
 #include "statistics.h"
+
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -69,4 +71,3 @@ void heap_sort(uint32_t *A, uint32_t n) {
         fix_heap(A, first, leaf - 1);
     }
 }
-
