@@ -35,10 +35,9 @@ bool stack_push(Stack *s, int64_t x) {
     if (s->top == s->capacity) {
         s->capacity = (s->capacity) * 2;
         s->items = (int64_t *) realloc(s->items, s->capacity * sizeof(int64_t));
-    } else {
-        s->items[s->top] = x;
-        s->top += 1;
     }
+    s->items[s->top] = x;
+    s->top += 1;
     if (s->items == NULL) {
         return false;
     } else {
@@ -58,10 +57,11 @@ bool stack_pop(Stack *s, int64_t *x) {
 void stack_print(Stack *s) {
     if (stack_empty(s) == true) {
         exit(1);
-    }
+    } else {
 
-    for (uint32_t i = 0; i < sizeof(s->capacity); i += 1) {
-        printf("%ld", s->items[i]);
+        for (uint32_t i = 0; i < sizeof(s->capacity); i += 1) {
+            printf("%ld", s->items[i]);
+        }
+        printf("\n");
     }
-    printf("\n");
 }
