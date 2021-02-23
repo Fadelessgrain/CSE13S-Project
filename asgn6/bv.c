@@ -13,7 +13,8 @@ struct BitVector {
 BitVector *bv_create(uint32_t length) {
 	BitVector *v = (BitVector*)calloc(1, sizeof(BitVector));
 	v->length = length;
-	v->vector = (uint8_t *)calloc(length, sizeof(uint8_t));
+	uint32_t num_byte = (length / 8 == 0) ? (length / 8) : (length / 8) + 1;
+	v->vector = (uint8_t *)calloc(num_byte, sizeof(uint8_t));
 	return v;
 }
 
