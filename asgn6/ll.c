@@ -25,12 +25,10 @@ LinkedList *ll_create(bool mtf) {
 }
 
 void ll_delete(LinkedList **ll) {
-    if (*ll != NULL) {
-        for (Node *n = (*ll)->head->next; n != (*ll)->tail; n = n->next) {
-            Node *temp = (*ll)->head->next;
-            node_delete(&((*ll)->head));
-            (*ll)->head = temp;
-        }
+    while ((*ll)->head != NULL) {
+        Node *temp = (*ll)->head->next;
+        node_delete(&((*ll)->head));
+        (*ll)->head = temp;
     }
     free(*ll);
     *ll = NULL;

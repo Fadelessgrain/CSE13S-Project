@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define Strdup(s) strcpy(malloc(strlen(s) + 1), s)
-
 char *strdup_(char *s) {
     char *p;
     if (s == NULL) {
@@ -18,11 +16,16 @@ char *strdup_(char *s) {
     }
     return p;
 }
+
 Node *node_create(char *oldspeak, char *newspeak) {
     Node *n = (Node *) malloc(sizeof(Node));
     if (n) {
         n->oldspeak = strdup_(oldspeak);
-        n->newspeak = strdup_(newspeak);
+        if (newspeak == NULL) {
+            n->newspeak = strdup_(newspeak);
+        } else {
+            n->newspeak = NULL;
+        }
         n->next = NULL;
         n->prev = NULL;
     }
@@ -32,7 +35,9 @@ Node *node_create(char *oldspeak, char *newspeak) {
 void node_delete(Node **n) {
     if (*n) {
         free((*n)->newspeak);
+        (*n)->newspeak = NULL;
         free((*n)->oldspeak);
+        (*n)->oldspeak = NULL;
         free(*n);
         *n = NULL;
     }
