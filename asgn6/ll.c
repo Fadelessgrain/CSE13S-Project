@@ -60,7 +60,9 @@ Node *ll_lookup(LinkedList *ll, char *oldspeak) {
 
 void ll_insert(LinkedList *ll, char *oldspeak, char *newspeak) {
     Node *n = node_create(oldspeak, newspeak);
-    n->next = ll->head->next;
+    n->prev = ll->head;
+    n->next = ll->tail->next;
+    ll->head->next->prev = n;
     ll->head->next = n;
     ll->length += 1;
 }

@@ -3,18 +3,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//struct Node {
-//	char *oldspeak ;
-//	char *newspeak ;
-//	Node *next ;
-//	Node *prev ;
-//};
 
+#define Strdup(s) strcpy(malloc(strlen(s) + 1), s)
+
+char *strdup_(char *s) {
+    char *p;
+    if (s == NULL) {
+        return NULL;
+    }
+    size_t l = strlen(s) + 1;
+    p = (char *) malloc(l);
+    if (p) {
+        strcpy(p, s);
+    }
+    return p;
+}
 Node *node_create(char *oldspeak, char *newspeak) {
     Node *n = (Node *) malloc(sizeof(Node));
     if (n) {
-        n->oldspeak = (oldspeak); //remember to fo a strdup
-        n->newspeak = (newspeak); //remeber to do a strdup
+        n->oldspeak = strdup_(oldspeak);
+        n->newspeak = strdup_(newspeak);
         n->next = NULL;
         n->prev = NULL;
     }
