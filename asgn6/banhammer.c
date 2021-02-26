@@ -15,7 +15,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define WORD    "[a-zA-Z0-9_]+(*|-)[a-zA-Z0-9_]+)*"
+#define WORD    "[a-zA-Z0-9_]+(('|-)[a-zA-Z0-9_]+)*"
 #define OPTIONS "h:f:m"
 int main(int argc, char **argv) {
     int opt = 0;
@@ -112,13 +112,16 @@ int main(int argc, char **argv) {
                "words into newspeak.\n");
         ll_print(goodwords);
     }
+	fclose(badspeak);
+    fclose(newspeak);
     clear_words();
     regfree(&re);
-    fclose(badspeak);
-    fclose(newspeak);
+//    fclose(badspeak);
+  //  fclose(newspeak);
     bf_delete(&b);
     ht_delete(&ht);
     ll_delete(&badwords);
     ll_delete(&goodwords);
+	printf("hello");
     return 0;
 }
