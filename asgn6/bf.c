@@ -41,6 +41,7 @@ BloomFilter *bf_create(uint32_t size) {
 }
 
 void bf_delete(BloomFilter **bf) {
+    bv_delete(&(*bf)->filter);
     free(*bf);
     *bf = NULL;
 }
@@ -63,10 +64,15 @@ bool bf_probe(BloomFilter *bf, char *oldspeak) {
     uint64_t p = hash(bf->primary, oldspeak) % bf_length(bf);
     uint64_t s = hash(bf->secondary, oldspeak) % bf_length(bf);
     uint64_t t = hash(bf->tertiary, oldspeak) % bf_length(bf);
-    bv_get_bit(bf->filter, p);
-    bv_get_bit(bf->filter, s);
-    bv_get_bit(bf->filter, t);
-    return 1;
+    uint64_t h1 = bv_get_bit(bf->filter, p);
+    uint64_t h2 = bv_get_bit(bf->filter, s);
+    uint64_t h3 = bv_get_bit(bf->filter, t);
+    if (h1 == 1 && h2 == 1 && h3 == 1) {
+        return 1;
+
+    } else {
+        return 0;
+    }
 }
 
 void bf_print(BloomFilter *bf) {
