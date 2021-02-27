@@ -10,8 +10,9 @@ banhammer: banhammer.c bf.c  bv.c hash.c ll.c node.c parser.c speck.c
 format:
 	clang-format -i --style=file *.[ch]
 
-#valgrind: all
-#	valgrind --leak-check=full --show-leak-kinds=all -s ./sorting -a -n 100 -p 0
+valgrind: all
+	cat ./badspeak.txt ./newspeak.txt | valgrind --leak-check=full --show-leak-kinds=all -s ./banhammer
+#	valgrind --leak-check=full --show-leak-kinds=all -s ./banhammer
 clean:
 	rm -f banhammer *.o
 
