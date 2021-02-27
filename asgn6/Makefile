@@ -12,7 +12,6 @@ format:
 
 valgrind: all
 	cat ./badspeak.txt ./newspeak.txt | valgrind --leak-check=full --show-leak-kinds=all -s ./banhammer
-#	valgrind --leak-check=full --show-leak-kinds=all -s ./banhammer
 clean:
 	rm -f banhammer *.o
 
