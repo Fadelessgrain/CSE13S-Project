@@ -16,5 +16,5 @@ their crimes, and suggestions on how to speak goodspeak.
 	or the bloom filter's size, or we can activate the move to the front option
 	$ cat ./badspeak.txt ./newspeak.txt | ./banhammer
 
-#CLEAN
+##CLEAN
 	$ rm -f banhammer *.o
