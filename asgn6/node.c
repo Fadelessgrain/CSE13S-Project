@@ -7,14 +7,14 @@
 // code below inspired by the class'  book implementation of strdup
 // copies + allocates memory for a string
 char *strdup_(char *s) {
-	// makes sure we don't allocate memory for a  null string
+    // makes sure we don't allocate memory for a  null string
     if (s == NULL) {
         return NULL;
     }
     char *p;
     size_t l = strlen(s) + 1;
     p = (char *) malloc(l);
-	// makes sure malloc doesn't fail
+    // makes sure malloc doesn't fail
     if (p == NULL) {
         return NULL;
     }
@@ -24,15 +24,14 @@ char *strdup_(char *s) {
 
 // code above inspired by the class' book implementation of strdup
 
-
-// allocates memory for a node + its struct 
+// allocates memory for a node + its struct
 // code below inspired by Euegene's section
 Node *node_create(char *oldspeak, char *newspeak) {
     Node *n = (Node *) malloc(sizeof(Node));
     if (n) {
-		// if oldspeak is null, copy it and allocate memory for it
+        // if oldspeak is null, copy it and allocate memory for it
         n->oldspeak = oldspeak = NULL ? NULL : strdup_(oldspeak);
-		// if newspeak is null, copy it and allocate memory for it
+        // if newspeak is null, copy it and allocate memory for it
         n->newspeak = newspeak = NULL ? NULL : strdup_(newspeak);
         n->next = NULL;
         n->prev = NULL;
@@ -59,10 +58,10 @@ void node_delete(Node **n) {
 
 //prints a node in the format given to us in the asgn document
 void node_print(Node *n) {
-	// if oldspeak exists and new speaks also exists, print it in this format
+    // if oldspeak exists and new speaks also exists, print it in this format
     if (n->oldspeak != NULL && n->newspeak != NULL) {
         printf("%s -> %s\n", n->oldspeak, n->newspeak);
-	// if nespeak doesn't exists simply print out oldspeak	
+        // if nespeak doesn't exists simply print out oldspeak
     } else if (n->oldspeak) {
         printf("%s\n", n->oldspeak);
     }
