@@ -50,11 +50,11 @@ uint32_t ht_size(HashTable *ht) {
 Node *ht_lookup(HashTable *ht, char *oldspeak) {
     // hashes the word
     uint32_t i = hash(ht->salt, oldspeak) % ht_size(ht);
-    // makes sure the LL exists
+    // checks if the hash isn't in the LL
     if (!ht->lists[i]) {
         return NULL;
     }
-    // uses that hash to check if it's already in the LL
+    // uses that hash to check if it's in the LL
     return ll_lookup(ht->lists[i], oldspeak);
 }
 
@@ -62,7 +62,7 @@ Node *ht_lookup(HashTable *ht, char *oldspeak) {
 void ht_insert(HashTable *ht, char *oldspeak, char *newspeak) {
     // hashes the word
     uint32_t i = hash(ht->salt, oldspeak) % ht_size(ht);
-    //makes sure the LL exists
+    //makes sure the hash LL exists, if it doesn't create a LL
     if (!ht->lists[i]) {
         ht->lists[i] = ll_create(ht->mtf);
     }
