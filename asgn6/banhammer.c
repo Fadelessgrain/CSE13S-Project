@@ -93,9 +93,14 @@ int main(int argc, char **argv) {
     uint32_t thoughtcrime = 0;
     // reads from stdin
     while ((word = next_word(stdin, &re)) != NULL) {
+        // sets the characters to lowercase so that regEX can read it
+        for (uint32_t i = 0; i < 1; i += 1) {
+            word[i] = tolower(word[i]);
+        }
         // checks that the word was added to the BF
         if (bf_probe(b, word) == true) {
             // temp node that stores the node returned from ht_lookup
+
             Node *trans_words = ht_lookup(ht, word);
             //checks to see if the ht contains the word and if it doesn't have a new
             // speak translation
