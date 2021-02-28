@@ -121,9 +121,9 @@ int main(int argc, char **argv) {
     }
     // if the user commited both rightspeak and thoughtspeak crimes, they needs to go to Joycamp
     if (rightspeak > 0 && thoughtcrime > 0) {
-        printf("\nDear Comrade,\n");
+        printf("Dear Comrade,\n\n");
         printf("You have chosen to use degenerate words that may cause hurt\nfeelings or cause "
-               "your comrades to think unpleasant thoughts.\nThis is doubleplus bad.To correct "
+               "your comrades to think unpleasant thoughts.\nThis is doubleplus bad. To correct "
                "your wrongthink and\npreserve community consensus we will be sending you "
                "to joycamp\nadministered by Medellin's Miniluv. Beware of the hippos.\n");
         printf("\nYour errors:\n\n");
@@ -136,9 +136,9 @@ int main(int argc, char **argv) {
         // since the user commited thoughtcrime, they needs to go to Joycamp
     } else if (thoughtcrime > 0) {
 
-        printf("\nDear Comrade,\n");
+        printf("Dear Comrade,\n\n");
         printf("You have chosen to use degenerate words that may cause hurt\nfeelings or cause "
-               "your comrades to think unpleasant thoughts.\nThis is doubleplus bad.To correct "
+               "your comrades to think unpleasant thoughts.\nThis is doubleplus bad. To correct "
                "your wrongthink and\npreserve community consensus we will be sending you "
                "to joycamp\nadministered by Medellin's Miniluv. Beware of the hippos.\n");
         printf("\nYour errors:\n\n");
@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
         // since the user only commited rightspeak crime, they should go to counseling
     } else if (rightspeak > 0) {
         // print out fromat given to us
-        printf("\nDear Comrade,\n\n");
+        printf("Dear Comrade,\n\n");
         printf("Submitting your text helps to preserve feelings and prevent\nbadthink. Some of the"
                "words that you used are not goodspeak.\nThe list shows how to turn the oldspeak "
                "words into newspeak.\n\n");
