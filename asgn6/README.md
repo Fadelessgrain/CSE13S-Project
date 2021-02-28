@@ -1,7 +1,8 @@
 # Assignment 6
 
-This program takes in words from stdin and checls to see if they are valid words. If they are not
-valid words, they should be added to a linked list and the user will recieve a message will
+This program takes in words from stdin and checks to see if they are valid words or if they are
+badspeak words. If they are not valid words, they should be added to a linked list and the user 
+will recieve a message will
 their crimes, and suggestions on how to speak goodspeak. 
 
 ## BUILD 
@@ -16,5 +17,5 @@ their crimes, and suggestions on how to speak goodspeak.
 	or the bloom filter's size, or we can activate the move to the front option
 	$ cat ./badspeak.txt ./newspeak.txt | ./banhammer
 
-##CLEAN
+## CLEAN
 	$ rm -f banhammer *.o
