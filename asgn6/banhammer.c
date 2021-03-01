@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     int opt = 0;
     // standard ht and bf size
     uint32_t hash_size = 10000;
-    uint32_t bloom_size = 1 << 20;
+    uint32_t bloom_size = 1048576;
     bool mtf = false;
 
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
