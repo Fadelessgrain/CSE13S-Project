@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
     // reads from stdin
     while ((word = next_word(stdin, &re)) != NULL) {
         // sets the characters to lowercase so that regEX can read it
-        for (uint32_t i = 0; i < 1; i += 1) {
+        for (uint32_t i = 0; i < strlen(word); i += 1) {
             word[i] = tolower(word[i]);
         }
         // checks that the word was added to the BF
