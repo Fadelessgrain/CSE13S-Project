@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
 // code below from Shahiti's section
 #define WORD "[a-zA-Z0-9_]+(('|-)[a-zA-Z0-9_]+)*"
 // code above from shahiti's section
@@ -25,16 +26,24 @@ int main(int argc, char **argv) {
     uint32_t hash_size = 10000;
     uint32_t bloom_size = 1 << 20;
     bool mtf = false;
-    // opens the files badspeak and newspeak
-    FILE *badspeak = fopen("badspeak.txt", "r");
-    FILE *newspeak = fopen("newspeak.txt", "r");
-    // checks the command line options parsed by the user
+
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'h': hash_size = atoi(optarg); break;
         case 'f': bloom_size = atoi(optarg); break;
         case 'm': mtf = true; break;
+        default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]); return 1;
         }
+    }
+
+    // opens the files badspeak and newspeak
+    FILE *badspeak = fopen("badspeak.txt", "r");
+    if (badspeak == NULL) {
+        fprintf(stderr, "Invalid badspeak file!");
+    }
+    FILE *newspeak = fopen("newspeak.txt", "r");
+    if (newspeak == NULL) {
+        fprintf(stderr, "Invalid newspeafile");
     }
 
     // code below inspired by Shahiti's section
