@@ -39,11 +39,11 @@ int main(int argc, char **argv) {
     // opens the files badspeak and newspeak
     FILE *badspeak = fopen("badspeak.txt", "r");
     if (badspeak == NULL) {
-        fprintf(stderr, "Invalid badspeak file!");
+        fprintf(stderr, "Invalid badspeak file!\n");
     }
     FILE *newspeak = fopen("newspeak.txt", "r");
     if (newspeak == NULL) {
-        fprintf(stderr, "Invalid newspeafile");
+        fprintf(stderr, "Invalid newspeak file!\n");
     }
 
     // code below inspired by Shahiti's section
@@ -51,14 +51,14 @@ int main(int argc, char **argv) {
     BloomFilter *b = bf_create(bloom_size);
     // makes sure the BF was created
     if (!b) {
-        fprintf(stderr, "Invalid Bloom Filter");
+        fprintf(stderr, "Invalid Bloom Filter\n");
         exit(1);
     }
     // creates a HT
     HashTable *ht = ht_create(hash_size, mtf);
     // makes sure a HT was created
     if (!ht) {
-        fprintf(stderr, "Invalid Hash Table");
+        fprintf(stderr, "Invalid Hash Table\n");
         exit(1);
     }
 
