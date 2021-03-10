@@ -30,6 +30,7 @@ void trie_reset(TrieNode *root) {
         }
     }
 }
+
 void trie_delete(TrieNode *n) {
     if (n != NULL) {
         for (int i = 0; i < ALPHABET; i += 1) {
