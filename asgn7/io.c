@@ -38,11 +38,33 @@ int write_bytes(int outfile, uint8_t *buf, int to_write) {
     return total_bytes_written;
 }
 
-//void read_header(int infile, FileHeader *header);
-//void write_header(int outfile, FileHeader *header);
-//bool read_sym(int infile, uint8_t *sym);
+void read_header(int infile, FileHeader *header) {
+    read_bytes(infile, header->magic, sizeof(FileHeader));
+    //	infile = 0;
+    if (big_endian() == true) {
+        header->magic = swap32(header->magic);
+        header->protection = swap16(header->protection);
+    }
+    return;
+}
+void write_header(int outfile, FileHeader *header) {
+    if (big_endian() == true) {
+        header->magic = swap32(header->magic);
+        header->protection = swap16(header->protection);
+    }
+    //	outfile = 0;
+    write_bytes(outfile, header, sizeof(FileHeader));
+    return;
+}
+
+//bool read_sym(int infile, uint8_t *sym) {
+
+//}
+
 //void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen);
+
 //void flush_pairs(int outfile);
 //bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen);
+
 //void write_word(int outfile, Word *w);
 //void flush_words(int outfile);
