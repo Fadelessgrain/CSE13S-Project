@@ -2,6 +2,7 @@
 
 #include "code.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 TrieNode *trie_node_create(uint16_t code) {
@@ -14,8 +15,10 @@ TrieNode *trie_node_create(uint16_t code) {
 }
 
 void trie_node_delete(TrieNode *n) {
-    free(n);
-    return;
+    if (n) {
+        free(n);
+        return;
+    }
 }
 
 TrieNode *trie_create(void) {
@@ -25,7 +28,7 @@ TrieNode *trie_create(void) {
 void trie_reset(TrieNode *root) {
     for (int i = 0; i < ALPHABET; i += 1) {
         if (root->children[i]) {
-            trie_reset(root->children[i]);
+            trie_delete(root->children[i]);
             root->children[i] = NULL;
         }
     }
