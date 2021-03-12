@@ -39,24 +39,27 @@ Word *word_append_sym(Word *w, uint8_t sym) {
 }
 
 void word_delete(Word *w) {
-    free(w->syms);
-    w->syms = NULL;
-    free(w);
-    w = NULL;
+    if (w) {
+        free(w->syms);
+        w->syms = NULL;
+        free(w);
+        w = NULL;
+    }
+    return;
 }
 
 WordTable *wt_create(void) {
     WordTable *wt = (WordTable *) calloc(MAX_CODE, sizeof(Word *));
     if (wt) {
         wt[EMPTY_CODE] = (Word *) calloc(1, sizeof(Word));
-        //        		word_create(NULL, 0);
+        //	word_create(NULL, 0);
     }
     return wt;
 }
 
 void wt_reset(WordTable *wt) {
     if (wt) {
-        for (int i = START_CODE; i < MAX_CODE; i += 1) {
+        for (int i = EMPTY_CODE; i < MAX_CODE; i += 1) {
             if (wt[i]) {
                 word_delete(wt[i]);
                 wt[i] = NULL;
@@ -67,15 +70,16 @@ void wt_reset(WordTable *wt) {
 }
 
 void wt_delete(WordTable *wt) {
-    if (wt) {
-        for (int i = EMPTY_CODE; i < MAX_CODE; i += 1) {
-            if (wt[i]) {
-                word_delete(wt[i]);
-                wt[i] = NULL;
-            }
-        }
-        free(wt);
-        wt = NULL;
+    if (!wt) {
         return;
     }
+    for (int i = EMPTY_CODE; i < MAX_CODE; i += 1) {
+        if (wt[i]) {
+            word_delete(wt[i]);
+            wt[i] = NULL;
+        }
+    }
+    free(wt);
+    wt = NULL;
+    return;
 }
