@@ -35,6 +35,7 @@ Word *word_append_sym(Word *w, uint8_t sym) {
             nw->syms[w->len] = sym;
         }
     }
+    word_delete(nw);
     return nw;
 }
 
