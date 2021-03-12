@@ -7,6 +7,9 @@
 
 TrieNode *trie_node_create(uint16_t code) {
     TrieNode *n = (TrieNode *) malloc(sizeof(TrieNode));
+    if (!n) {
+        return NULL;
+    }
     for (int i = 0; i < ALPHABET; i += 1) {
         n->children[i] = NULL;
     }
@@ -17,6 +20,7 @@ TrieNode *trie_node_create(uint16_t code) {
 void trie_node_delete(TrieNode *n) {
     if (n) {
         free(n);
+        n = NULL;
         return;
     }
 }
@@ -32,16 +36,18 @@ void trie_reset(TrieNode *root) {
             root->children[i] = NULL;
         }
     }
+    return;
 }
 
 void trie_delete(TrieNode *n) {
-    if (n != NULL) {
+    if (n) {
         for (int i = 0; i < ALPHABET; i += 1) {
             trie_delete(n->children[i]);
             n->children[i] = NULL;
         }
-        free(n);
+        trie_node_delete(n);
     }
+    return;
 }
 
 TrieNode *trie_step(TrieNode *n, uint8_t sym) {
