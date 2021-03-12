@@ -6,16 +6,17 @@
 #include <string.h>
 
 Word *word_create(uint8_t *syms, uint32_t len) {
-    Word *w = (Word *) malloc(sizeof(Word));
-    if (!w) {
-        return NULL;
+    Word *w = (Word *) calloc(1, sizeof(Word));
+    if (w) {
+        w->len = len;
+        w->syms = (uint8_t *) calloc(1, len * sizeof(uint8_t));
+        if (w->syms) {
+            //  	for (uint8_t i = 0; i < w->len; i += 1) {
+            //	w->syms[i] = *syms;
+            memcpy(w->syms, syms, len);
+            //  	}
+        }
     }
-    w->len = len;
-    w->syms = (uint8_t *) malloc(len * sizeof(uint8_t));
-    if (!w->syms) {
-        return NULL;
-    }
-    memcpy(w->syms, syms, len);
     return w;
 }
 
@@ -45,9 +46,10 @@ void word_delete(Word *w) {
 }
 
 WordTable *wt_create(void) {
-    WordTable *wt = (WordTable *) calloc(MAX_CODE, sizeof(Word));
+    WordTable *wt = (WordTable *) calloc(MAX_CODE, sizeof(Word *));
     if (wt) {
-        wt[EMPTY_CODE] = word_create(NULL, 0);
+        wt[EMPTY_CODE] = (Word *) calloc(1, sizeof(Word));
+        //        		word_create(NULL, 0);
     }
     return wt;
 }
@@ -66,14 +68,14 @@ void wt_reset(WordTable *wt) {
 
 void wt_delete(WordTable *wt) {
     if (wt) {
-        for (int i = 0; i < MAX_CODE; i += 1) {
+        for (int i = EMPTY_CODE; i < MAX_CODE; i += 1) {
             if (wt[i]) {
                 word_delete(wt[i]);
                 wt[i] = NULL;
             }
         }
-
         free(wt);
+        wt = NULL;
         return;
     }
 }
