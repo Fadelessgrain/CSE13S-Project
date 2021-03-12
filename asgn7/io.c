@@ -110,7 +110,7 @@ void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
             read1_buff[buff_index / 8] &= ~(1 << (buff_index % 8));
         }
         buff_index += 1;
-		// if our indexing counter is at the end, reset the counter and read anther block
+        // if our indexing counter is at the end, reset the counter and read anther block
         if (buff_index == BLOCK * 8) {
             write_bytes(outfile, read1_buff, BLOCK);
             buff_index = 0;
@@ -140,55 +140,53 @@ void flush_pairs(int outfile) {
 }
 
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
-    uint16_t *temp_c = 0;
+    *code = 0;
     for (int i = 0; i < bitlen; i += 1) {
         // if our bit buffer is empty, read bytes
-		if (buff_index == 0) {
+        if (buff_index == 0) {
             read_bytes(infile, read1_buff, BLOCK);
-        } 
-		// set our bit if its 1
+        }
+        // set our bit if its 1 after gettin the bit
         if (bv_get_bit_16(read1_buff, buff_index) == 1) {
-            *temp_c |= (1 << i);
+            *code |= (1 << i);
         } else {
-		// otherwise clear it 
-            *temp_c &= ~(1 << i);
+            // otherwise clear it
+            *code &= ~(1 << i);
         }
         buff_index += 1;
-		//if our counter is at the end of the block, reset it
+        //if our counter is at the end of the block, reset it
         if (buff_index == BLOCK * 8) {
             buff_index = 0;
         }
-        *code = *temp_c;
     }
 
-    uint16_t *temp_s = 0;
+    *sym = 0;
     for (int i = 0; i < 8; i += 1) {
         if (buff_index == 0) {
             read_bytes(infile, read1_buff, BLOCK);
         }
         if (bv_get_bit(read1_buff, buff_index) == 1) {
-            *temp_s |= (1 << i);
+            *sym |= (1 << i);
         } else {
-            *temp_s &= ~(1 << i);
+            *sym &= ~(1 << i);
         }
         buff_index += 1;
         if (buff_index == BLOCK * 8) {
             buff_index = 0;
         }
-        *sym = *temp_s;
-    } 
-	// returns weather we have more pair of codes to read! 
-    return *temp_c == STOP_CODE;
+    }
+    // returns weather we have more pair of codes to read!
+    return *code == STOP_CODE;
 }
 
 void write_word(int outfile, Word *w) {
-	// loop through the word 
+    // loop through the word
     for (uint32_t i = 0; i < w->len; i += 1) {
-		// copys it
+        // copys it
         sym_buff[Index] = w->syms[i];
         Index += 1;
         // if our couter is at the end of the bloc, reset it !
-		if (Index == BLOCK * 8) {
+        if (Index == BLOCK * 8) {
             write_bytes(outfile, sym_buff, BLOCK);
             Index = 0;
         }
