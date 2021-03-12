@@ -19,15 +19,18 @@ static int conver_to_bytes(int bits) {
     return num_byte;
 }
 
-uint16_t bv_get_bit_16(uint8_t array[], uint32_t i) {
+uint8_t bv_get_bit_16(uint8_t array[], uint16_t i) {
     return (array[i / 8] >> (i % 8)) & 1;
 }
 
-uint8_t bv_get_bit(uint8_t array[], uint32_t i) {
+uint8_t bv_get_bit(uint8_t array[], uint8_t i) {
     return (array[i / 8] >> (i % 8)) & 1;
 }
+
+uint8_t get_bit(uint16_t code, uint8_t i) {
+    return (code >> (i % 8)) & 1;
+}
 int read_bytes(int infile, uint8_t *buf, int to_read) {
-    // int to_read_bytes = to_read;
     int total_bytes_read = 0;
     int bytes_read = 0;
     do {
@@ -36,15 +39,13 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
             fprintf(stderr, "End of file!\n");
             exit(1);
         }
-        //   to_read_bytes -= bytes_read;
         total_bytes_read += bytes_read;
-    } while (total_bytes_read != to_read);
+    } while (total_bytes_read != to_read && to_read != 0);
 
     return total_bytes_read;
 }
 
 int write_bytes(int outfile, uint8_t *buf, int to_write) {
-    //  int to_write_bytes = to_write;
     int total_bytes_written = 0;
     int bytes_written = 0;
     do {
@@ -53,9 +54,8 @@ int write_bytes(int outfile, uint8_t *buf, int to_write) {
             fprintf(stderr, "End of file!\n");
             exit(1);
         }
-        //    to_write_bytes -= bytes_written;
         total_bytes_written += bytes_written;
-    } while (total_bytes_written != to_write);
+    } while (total_bytes_written != to_write && to_write != 0);
 
     return total_bytes_written;
 }
@@ -88,7 +88,7 @@ bool read_sym(int infile, uint8_t *sym) {
     }
     *sym = sym_buff[Index];
     Index += 1;
-    if (Index == BLOCK) {
+    if (Index == BLOCK * 8) {
         Index = 0;
     }
     if (Index == check) {
@@ -99,9 +99,10 @@ bool read_sym(int infile, uint8_t *sym) {
 }
 
 void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
-    for (int i = 0; i < bitlen; i += 1) {
+    for (uint8_t i = 0; i < bitlen; i += 1) {
         // gets the bit
-        uint8_t bit = (code >> i) & 1;
+        //    uint8_t bit = (code >> i) & 1;
+        uint8_t bit = get_bit(code, i);
         if (bit == 1) {
             // set the bit
             read1_buff[buff_index / 8] |= (1 << (buff_index % 8));
