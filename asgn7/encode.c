@@ -10,26 +10,37 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#define OPTIONS "i:o:v"
+#define OPTIONS "i:o:"
 
 int len_of_bits(uint16_t x) {
     uint16_t y = 0;
-    while (x) {
-
+    while (x > 0) {
+        //		do {
         y += 1;
         x >>= 1;
-    }
+    } //while (x > 0);
     return y;
 }
 
 int main(int argc, char **argv) {
+    //int main(void) {
+
     int opt = 0;
     //set the standard file
-    int infile = 0;
+    int infile = STDIN_FILENO;
     //set the standard file to print to
-    int outfile = 1;
+    int outfile = STDOUT_FILENO;
     //struct used to gte the correct permisions
-    bool v = false;
+    //   bool v = false;
+    struct stat buf;
+    fstat(infile, &buf);
+    //   fchmod(outfile, buf.st_mode);
+    FileHeader h = { 0, 0 };
+    h.magic = MAGIC;
+    h.protection = buf.st_mode;
+    //     fchmod(outfile, h.protection);
+    //   write_header(outfile, &h);
+
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'i':
@@ -53,18 +64,19 @@ int main(int argc, char **argv) {
             }
             break;
 
-        case 'v': v = true; break;
+            //     case 'v': v = true; break;
 
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
     //struct used to get the correct permisions
-    struct stat buf;
-    fstat(infile, &buf);
-    fchmod(outfile, buf.st_mode);
-    FileHeader h = { 0, 0 };
-    h.magic = 0xBAADBAAC;
-    h.protection = buf.st_mode;
+    // struct stat buf;
+    // fstat(infile, &buf);
+    //   fchmod(outfile, buf.st_mode);
+    // FileHeader h = { 0, 0 };
+    // h.magic = MAGIC;
+    // h.protection = buf.st_mode;
+    fchmod(outfile, h.protection);
     write_header(outfile, &h);
 
     TrieNode *root = trie_create();
@@ -76,13 +88,12 @@ int main(int argc, char **argv) {
     while (read_sym(infile, &curr_sym)) {
         TrieNode *next_node = trie_step(curr_node, curr_sym);
 
-        if (next_node) {
+        if (next_node != NULL) {
 
             prev_node = curr_node;
             curr_node = next_node;
 
         } else {
-
             write_pair(outfile, curr_node->code, curr_sym, len_of_bits(next_code));
             curr_node->children[curr_sym] = trie_node_create(next_code);
             curr_node = root;
@@ -95,14 +106,13 @@ int main(int argc, char **argv) {
         }
         prev_sym = curr_sym;
         if (curr_node != root) {
-            write_pair(outfile, prev_node->code, prev_sym, next_code);
+            write_pair(outfile, prev_node->code, prev_sym, len_of_bits(next_code));
             next_code += 1;
             next_code = next_code % MAX_CODE;
         }
     }
-    write_pair(outfile, STOP_CODE, 0, next_code);
+    write_pair(outfile, STOP_CODE, 0, len_of_bits(next_code));
     flush_pairs(outfile);
-
     close(infile);
     close(outfile);
     trie_delete(root);

@@ -80,20 +80,19 @@ bool read_sym(int infile, uint8_t *sym) {
         if (bytes < BLOCK) {
             check = bytes + 1;
         }
-        // passes back our buffer at the current index
     }
+    // passes back our buffer at the current index
     *sym = sym_buff[Index];
     Index += 1;
     if (Index == BLOCK) {
         Index = 0;
     }
+	// easier to visualize for me ;) 
     if (Index == check) {
         return false;
     } else {
         return true;
-        //
     }
-    //	return Index == check ? false: true ;
 }
 void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
     //    printf("code %d\n", code);
