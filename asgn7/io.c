@@ -72,8 +72,9 @@ void write_header(int outfile, FileHeader *header) {
     write_bytes(outfile, (uint8_t *) header, sizeof(FileHeader));
     return;
 }
+
 bool read_sym(int infile, uint8_t *sym) {
-    int check = -1; // end of the buffer
+    static int check = -1; // end of the buffer
     if (Index == 0) {
         int bytes = read_bytes(infile, sym_buff, BLOCK);
         if (bytes < BLOCK) {
@@ -86,11 +87,13 @@ bool read_sym(int infile, uint8_t *sym) {
     if (Index == BLOCK) {
         Index = 0;
     }
-    if (Index != check) {
-        return true;
-    } else {
+    if (Index == check) {
         return false;
+    } else {
+        return true;
+        //
     }
+    //	return Index == check ? false: true ;
 }
 void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
     //    printf("code %d\n", code);
