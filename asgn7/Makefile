@@ -1,21 +1,19 @@
 CC = clang
 CFLAGS = -Wall -Werror -Wextra -Wpedantic  
 
-all: encode decode  
+all: encode decode
 
+encode: encode.c trie.c io.c
+	$(CC) $(CFLAGS) -o encode encode.c trie.c io.c
 
-encode: encode.c trie.c 
-	$(CC) $(CFLAGS) -o encode encode.c trie.c
-
-decode: decode.c word.c 
-	$(CC) $(CFLAGS) -o decode decode.c word.c
+decode: decode.c word.c io.c
+	$(CC) $(CFLAGS) -o decode decode.c word.c io.c
 
 format: 
 	clang-format -i --style=file *.[ch]
 
-#valgrind: all 
-#	valgrind --leak-check=full --show-leak-kinds=all -s ./gen ./gen -i frankenstein.txt
-
+valgrind: all 
+	valgrind --leak-check=full --show-leak-kinds=all -s ./encode -i corpora/large/bible.txt
 clean:
 	rm -f encode decode *.o
 debug: CFLAGS += -g
