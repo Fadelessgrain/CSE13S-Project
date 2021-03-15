@@ -13,8 +13,15 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#define OPTIONS "i:o:"
+#define OPTIONS "vi:o:"
 
+// helper function to converts bits to bytes
+uint64_t conver_to_bytes_(uint64_t bits) {
+    uint64_t num_byte = bits % 8 == 0 ? bits / 8 : (bits / 8) + 1;
+    return num_byte;
+}
+
+// helper function that calc the bits needed to represent a number
 int len_of_bits(uint16_t x) {
     int y = 0;
     while (x > 0) {
@@ -26,6 +33,7 @@ int len_of_bits(uint16_t x) {
 
 int main(int argc, char **argv) {
     int opt = 0;
+    bool v = false;
     //set the standard file
     int infile = STDIN_FILENO;
     //set the standard file to print to
@@ -57,10 +65,18 @@ int main(int argc, char **argv) {
                 exit(1);
             }
             break;
-            //     case 'v': v = true; break;
+        case 'v': v = true; break;
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
+    // prints out the stats
+    if (v == true) {
+        double s = 1.0 - (double) conver_to_bytes_(total_bits) / (double) total_syms;
+        printf("Compressed file size: %lu \n", conver_to_bytes_(total_bits));
+        printf("Uncompressed file size: %lu \n", total_syms);
+        printf("Space saving: %f \n", (s * 100.0));
+    }
+
     // reader file header + permission
     read_header(infile, &h);
     // creates a word table
