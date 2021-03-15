@@ -95,7 +95,7 @@ bool read_sym(int infile, uint8_t *sym) {
         // as long as our bytes read is less then the block, increment the index
         // for end of buffer
         if (bytes < BLOCK) {
-            check = bytes + 1;
+            check = bytes;
         }
     }
     // passes back our buffer at the current index
@@ -119,11 +119,11 @@ void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
     // loop to find the bits in code
     for (int i = 0; i < bitlen; i += 1) {
         // check if index i of code is 1, then set the bit
-        if (((code & (1 << i)) >> i) == 1) {
-            read1_buff[buff_index / 8] |= (1 << (buff_index % 16));
+        if (((code >> i) & 1) == 1) {
+            read1_buff[buff_index / 8] |= (1 << (buff_index % 8));
         } else {
             // clear the bit
-            read1_buff[buff_index / 8] &= ~(1 << (buff_index % 16));
+            read1_buff[buff_index / 8] &= ~(1 << (buff_index % 8));
         }
         buff_index += 1;
         // if our indexing counter is at the end, reset the counter and
@@ -136,7 +136,7 @@ void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
     // loop to find the bits in sym
     for (int i = 0; i < 8; i += 1) {
         // check if index i of code is 1, then set the bit
-        if (((sym & (1 << i)) >> i) == 1) {
+        if (((sym >> i) & 1) == 1) {
             read1_buff[buff_index / 8] |= (1 << (buff_index % 8));
             // clear the bit
         } else {
