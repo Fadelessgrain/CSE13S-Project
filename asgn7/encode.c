@@ -19,7 +19,7 @@ uint64_t conver_to_bytes_(uint64_t bits) {
 }
 
 // helper function that calc how many bits in a uint16
-int len_of_bits(uint16_t x) {
+int len_of_bits(int x) {
     int y = 0;
     while (x > 0) {
         y += 1;
@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     TrieNode *prev_node = NULL;
     uint8_t curr_sym = 0;
     uint16_t prev_sym = 0;
-    uint16_t next_code = START_CODE;
+    int next_code = START_CODE;
     // as long as there are syms to read, keep looping
     while (read_sym(infile, &curr_sym)) {
         // check if the sym is in the trie node, then store it
@@ -104,15 +104,16 @@ int main(int argc, char **argv) {
             trie_reset(root);
             curr_node = root;
             next_code = START_CODE;
+
+            // update position of our prev sym read
         }
-        // update position of our prev sym read
         prev_sym = curr_sym;
-        // as long as our current node is not the read write a pair
-        if (curr_node != root) {
-            write_pair(outfile, prev_node->code, prev_sym, len_of_bits(next_code));
-            next_code += 1;
-            next_code = next_code % MAX_CODE;
-        }
+    }
+    // as long as our current node is not the read write a pair
+    if (curr_node != root) {
+        write_pair(outfile, prev_node->code, prev_sym, len_of_bits(next_code));
+        next_code += 1;
+        next_code = next_code % MAX_CODE;
     }
     // write the pair at the end + close the files and free memory
     write_pair(outfile, STOP_CODE, 0, len_of_bits(next_code));
