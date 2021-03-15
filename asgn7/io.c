@@ -16,6 +16,10 @@ static uint8_t sym_buff[BLOCK] = { 0 };
 static int Index = 0;
 static int buff_index = 0;
 
+uint64_t total_syms; // To count the symbols processed.                                      
+uint64_t total_bits; // To count the bits processed. 
+
+
 // checks how many bytes needed for a bits
 static int conver_to_bytes(int bits) {
     int num_byte = bits % 8 == 0 ? bits / 8 : (bits / 8) + 1;
@@ -25,7 +29,9 @@ static int conver_to_bytes(int bits) {
 // code below inspired by Gabe's session
 // reads bytes from a file
 int read_bytes(int infile, uint8_t *buf, int to_read) {
-    // increments the total amount of bytes read
+    total_bits += (sizeof(FileHeader) * 8);
+
+	// increments the total amount of bytes read
     int total_bytes_read = 0;
     // keeps tract of how many bytes we have read
     int bytes_read = 0;
@@ -34,11 +40,11 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
         // increment the total bytes we have read
         total_bytes_read += bytes_read;
         // increments the buff
-        buf += bytes_read;
+        buf += total_bytes_read;
         // decrements how many bytes we still have to read
-        to_read -= bytes_read;
+        to_read -= total_bytes_read;
         // loop until we have no bytes to read
-    } while (bytes_read > 0 && to_read != 0);
+    } while (bytes_read > 0 && to_read > 0);
     // returns the total amount of bytes read
     return total_bytes_read;
 }
@@ -54,18 +60,19 @@ int write_bytes(int outfile, uint8_t *buf, int to_write) {
         // increment the total bytes we have written
         total_bytes_written += bytes_written;
         // increments the buff
-        buf += bytes_written;
+        buf += total_bytes_written;
         // decrements how many bytes we still have to write
-        to_write -= bytes_written;
+        to_write -= total_bytes_written;
         // loop until we have no bytes to write
-    } while (bytes_written > 0 && to_write != 0);
+    } while (bytes_written > 0 && to_write > 0);
     // returns the total amount of bytes written
     return total_bytes_written;
 }
 
 // reads from a file
 void read_header(int infile, FileHeader *header) {
-    // reads bytes from a file
+    // reads bytes from a file + increment counter for 
+	total_bits += (sizeof(FileHeader) * 8);
     read_bytes(infile, (uint8_t *) header, sizeof(FileHeader));
     if (big_endian() == true) {
         header->magic = swap32(header->magic);
@@ -76,6 +83,7 @@ void read_header(int infile, FileHeader *header) {
 
 // writes to a file
 void write_header(int outfile, FileHeader *header) {
+	total_bits += (sizeof(FileHeader) * 8); 
     if (big_endian() == true) {
         header->magic = swap32(header->magic);
         header->protection = swap16(header->protection);
@@ -91,11 +99,11 @@ bool read_sym(int infile, uint8_t *sym) {
     static int check = -1;
     // checks if our index is at 0, read bytes from a file
     if (Index == 0) {
-        int bytes = read_bytes(infile, sym_buff, BLOCK);
+      int bytes = read_bytes(infile, sym_buff, BLOCK);
         // as long as our bytes read is less then the block, increment the index
         // for end of buffer
         if (bytes < BLOCK) {
-            check = bytes;
+            check = bytes + 1;
         }
     }
     // passes back our buffer at the current index
@@ -105,10 +113,12 @@ bool read_sym(int infile, uint8_t *sym) {
     if (Index == BLOCK) {
         Index = 0;
     }
+
     // if index is equal to the tracker for end of block
     if (Index == check) {
         return false;
     } else {
+		total_syms += 1;
         return true;
     }
 }
@@ -117,7 +127,8 @@ bool read_sym(int infile, uint8_t *sym) {
 // Code below from Eugene's session
 void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
     // loop to find the bits in code
-    for (int i = 0; i < bitlen; i += 1) {
+    total_bits += (8 + bitlen); 
+	for (int i = 0; i < bitlen; i += 1) {
         // check if index i of code is 1, then set the bit
         if (((code >> i) & 1) == 1) {
             read1_buff[buff_index / 8] |= (1 << (buff_index % 8));
@@ -131,6 +142,7 @@ void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
         if (buff_index == BLOCK * 8) {
             write_bytes(outfile, read1_buff, BLOCK);
             buff_index = 0;
+			flush_pairs(outfile);
         }
     }
     // loop to find the bits in sym
@@ -143,10 +155,11 @@ void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
             read1_buff[buff_index / 8] &= ~(1 << (buff_index % 8));
         }
         buff_index += 1;
-        // if our indexing counter is at the end, reset the counter and                    // read anther block
+        // if our indexing counter is at the end, reset the counter and read anther block
         if (buff_index == BLOCK * 8) {
             write_bytes(outfile, read1_buff, BLOCK);
             buff_index = 0;
+			flush_pairs(outfile);
         }
     }
 }
@@ -162,7 +175,8 @@ void flush_pairs(int outfile) {
 
 // code below from Eugene's session
 bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
-    // clears our our code
+    total_bits += (8 + bitlen); 
+	// clears our our code
     *code = 0;
     // loops through the bits in code
     for (int i = 0; i < bitlen; i += 1) {
@@ -214,8 +228,10 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
 }
 // code above from Eugene's session
 
+//code below from Eugene's session
 // writes words into a file
 void write_word(int outfile, Word *w) {
+	total_syms += w->len;
     // loop through the len of thw word
     for (uint32_t i = 0; i < w->len; i += 1) {
         // copys it
@@ -229,6 +245,8 @@ void write_word(int outfile, Word *w) {
     }
     return;
 }
+//code above from Eugene's session
+
 // flushes words to a file
 void flush_words(int outfile) {
     if (buff_index > 0) {
