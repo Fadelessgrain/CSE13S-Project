@@ -38,13 +38,6 @@ int main(int argc, char **argv) {
     int infile = STDIN_FILENO;
     //set the standard file to print to
     int outfile = STDOUT_FILENO;
-    //struct used to get header file info
-    FileHeader h = { 0, 0 };
-    // checks to make sure we have the correct magic number
-    if (h.magic != MAGIC) {
-        fprintf(stderr, "Not a valid magic number!\n");
-        exit(1);
-    }
     while ((opt = getopt(argc, argv, OPTIONS)) != -1) {
         switch (opt) {
         case 'i':
@@ -77,8 +70,17 @@ int main(int argc, char **argv) {
         printf("Space saving: %f \n", (s * 100.0));
     }
 
+    //struct used to get header file info
+    FileHeader h = { 0, 0 };
     // reader file header + permission
     read_header(infile, &h);
+    // checks to make sure we have the correct magic number
+    if (h.magic != MAGIC) {
+        fprintf(stderr, "Not a valid magic number!\n");
+        exit(1);
+    }
+
+    // reader file header + permission
     // creates a word table
     WordTable *wt = wt_create();
     uint8_t curr_sym = 0;

@@ -39,15 +39,15 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
         // increment the total bytes we have read
         total_bytes_read += bytes_read;
         // increments the buff
-        buf += total_bytes_read;
+        buf += bytes_read;
         // decrements how many bytes we still have to read
-        to_read -= total_bytes_read;
+        to_read -= bytes_read;
         // loop until we have no bytes to read
     } while (bytes_read > 0 && to_read > 0);
     // returns the total amount of bytes read
     return total_bytes_read;
 }
-// code above from Gabe's session
+// code above inspired by Gabe's session
 
 int write_bytes(int outfile, uint8_t *buf, int to_write) {
     // increments the total amount of bytes written
@@ -59,9 +59,9 @@ int write_bytes(int outfile, uint8_t *buf, int to_write) {
         // increment the total bytes we have written
         total_bytes_written += bytes_written;
         // increments the buff
-        buf += total_bytes_written;
+        buf += bytes_written;
         // decrements how many bytes we still have to write
-        to_write -= total_bytes_written;
+        to_write -= bytes_written;
         // loop until we have no bytes to write
     } while (bytes_written > 0 && to_write > 0);
     // returns the total amount of bytes written
@@ -184,7 +184,7 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
             read_bytes(infile, read1_buff, BLOCK);
         }
         // get the bit of code at index i, and set it if it == 1
-        if (read1_buff[buff_index / 8] >> ((i % 16) & 1) == 1) {
+        if (((read1_buff[buff_index / 8] >> (buff_index % 8)) & 1) == 1) {
             *code |= (1 << i);
         } else {
             // otherwise clear it
@@ -193,7 +193,7 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
         buff_index += 1;
         //if our counter is at the end of the block, reset it
         if (buff_index == BLOCK * 8) {
-            //            flush_pairs(infile);
+            flush_pairs(infile);
             buff_index = 0;
         }
     }
@@ -206,7 +206,7 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
             read_bytes(infile, read1_buff, BLOCK);
         }
         // get the bit of sym at index i, and set it if it == 1
-        if (read1_buff[buff_index / 8] >> ((i % 8) & 1) == 1) {
+        if (((read1_buff[buff_index / 8] >> (buff_index % 8)) & 1) == 1) {
             *sym |= (1 << i);
             // otherwise clear the bit
         } else {
@@ -215,6 +215,7 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
         buff_index += 1;
         // check if we are at the end of a block
         if (buff_index == BLOCK * 8) {
+            flush_pairs(infile);
             buff_index = 0;
         }
     }
@@ -247,8 +248,10 @@ void write_word(int outfile, Word *w) {
 //code above from Eugene's session
 
 // flushes words to a file
+// code below from Eugene's session during week 10
 void flush_words(int outfile) {
-    if (buff_index > 0) {
-        write_bytes(outfile, read1_buff, conver_to_bytes(buff_index));
+    if (Index > 0) {
+        write_bytes(outfile, sym_buff, Index);
     }
 }
+// code above from Eugene's session during week 10
