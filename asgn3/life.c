@@ -71,27 +71,12 @@ int main(int argc, char **argv) {
     //counter that will be used to check the 3 conditions
     //to see if a cell is alive/dead
     int count = 0;
-    //sets the screen for curses
-    if (r_s == true) {
-        initscr();
-        noecho();
-        curs_set(FALSE);
-    }
     //generate through the generations
     for (int i = 0; i < generation; i += 1) {
         //generate through the rows
         for (int r = 0; r < rows; r += 1) {
             //igenerate through the cols
             for (int c = 0; c < cols; c += 1) {
-                //print the ncurses
-                if (r_s == true) {
-                    clear();
-                    if ((uv_get_cell(a, r, c) == true)) {
-                        mvprintw(r, c, "o");
-                        refresh();
-                        usleep(DELAY);
-                    }
-                }
                 //gets the number of neighboors
                 count = uv_census(a, r, c);
                 //gets the value of a cell
@@ -120,8 +105,7 @@ int main(int argc, char **argv) {
             endwin();
         }
     }
-    //return the curses
-    curs_set(TRUE);
+    
     //print universe a
     uv_print(a, outfile);
     //delete universe a
