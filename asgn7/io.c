@@ -25,7 +25,6 @@ static int conver_to_bytes(int bits) {
     return num_byte;
 }
 
-// code below inspired by Gabe's session
 // reads bytes from a file
 int read_bytes(int infile, uint8_t *buf, int to_read) {
     total_bits += (sizeof(FileHeader) * 8);
@@ -47,7 +46,6 @@ int read_bytes(int infile, uint8_t *buf, int to_read) {
     // returns the total amount of bytes read
     return total_bytes_read;
 }
-// code above inspired by Gabe's session
 
 int write_bytes(int outfile, uint8_t *buf, int to_write) {
     // increments the total amount of bytes written
@@ -123,7 +121,6 @@ bool read_sym(int infile, uint8_t *sym) {
 }
 // code below from Eugene's session
 
-// Code below from Eugene's session
 void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
     // loop to find the bits in code
     total_bits += (8 + bitlen);
@@ -162,7 +159,6 @@ void write_pair(int outfile, uint16_t code, uint8_t sym, int bitlen) {
         }
     }
 }
-// code above from Eugene's session
 
 // flushes a pair to the file
 void flush_pairs(int outfile) {
@@ -228,7 +224,6 @@ bool read_pair(int infile, uint16_t *code, uint8_t *sym, int bitlen) {
 }
 // code above from Eugene's session
 
-//code below from Eugene's session
 // writes words into a file
 void write_word(int outfile, Word *w) {
     total_syms += w->len;
@@ -245,13 +240,11 @@ void write_word(int outfile, Word *w) {
     }
     return;
 }
-//code above from Eugene's session
 
 // flushes words to a file
-// code below from Eugene's session during week 10
+
 void flush_words(int outfile) {
     if (Index > 0) {
         write_bytes(outfile, sym_buff, Index);
     }
 }
-// code above from Eugene's session during week 10
