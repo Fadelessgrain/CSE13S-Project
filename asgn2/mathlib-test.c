@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-//code below inspired by Eugene's lab
+// command line options that can be parsed to the program
 #define OPTIONS "asctel"
 
 int main(int argc, char **argv) {
@@ -28,9 +28,8 @@ int main(int argc, char **argv) {
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
-    //code above inspired by Eugene's lab
     if (r_sin == true) {
-        printf("  x           Cos              Library        Difference\n");
+        printf("  x           Sin              Library        Difference\n");
         printf("  -           ---               -------        ---------\n");
         for (double x = -2 * M_PI; x < 2 * M_PI; x += 0.1) {
             double my_sin = Sin(x);
