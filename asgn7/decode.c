@@ -13,7 +13,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#define OPTIONS "vi:o:"
+#define OPTIONS "i:o:"
 
 // helper function to converts bits to bytes
 uint64_t conver_to_bytes_(uint64_t bits) {
@@ -33,7 +33,6 @@ int len_of_bits(uint16_t x) {
 
 int main(int argc, char **argv) {
     int opt = 0;
-    bool v = false;
     //set the standard file
     int infile = STDIN_FILENO;
     //set the standard file to print to
@@ -58,17 +57,10 @@ int main(int argc, char **argv) {
                 exit(1);
             }
             break;
-        case 'v': v = true; break;
         default: fprintf(stderr, "Not a valid option. Use %s -[asctel]\n", argv[0]);
         }
     }
-    // prints out the stats
-    if (v == true) {
-        double s = 1.0 - (double) conver_to_bytes_(total_bits) / (double) total_syms;
-        printf("Compressed file size: %lu \n", conver_to_bytes_(total_bits));
-        printf("Uncompressed file size: %lu \n", total_syms);
-        printf("Space saving: %f \n", (s * 100.0));
-    }
+    
 
     //struct used to get header file info
     FileHeader h = { 0, 0 };
