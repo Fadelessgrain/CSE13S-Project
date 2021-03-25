@@ -3,23 +3,19 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
-//
+
 //	calculates position of left player
-//
 uint32_t left(uint32_t pos, uint32_t players) {
     return (pos + players - 1) % players;
 }
-//
-//  calculates position of right player
-//
+//  calculates position of right player/
 uint32_t right(uint32_t pos, uint32_t players) {
     return (pos + 1) % players;
 }
-//	Code below from Eugene's secion
+// makes sure we stay in our bounds
 int roll(void) {
     return random() % 6;
 }
-//	Code above from Eugenue's section
 int lives[10] = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }; // creates lives
 
 int main(void) {
@@ -31,7 +27,7 @@ int main(void) {
         fprintf(stderr, "Invalid number of players.");
         exit(1);
     } else {
-        // code below from Eugene's section
+		// checks for a valid number of seed
         int64_t seed = 0;
         printf("Random seed: ");
         if (scanf("%" SCNd64, &seed) != 1 || seed < 0) {
@@ -41,7 +37,6 @@ int main(void) {
         if (seed > UINT32_MAX) {
             fprintf(stderr, "Invalid random of seed.");
             exit(1);
-            // code above from Eugene's section
         } else {
             //if user inputs a valid seed, start the game
             srandom(seed);
