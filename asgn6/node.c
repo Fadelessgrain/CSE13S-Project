@@ -25,7 +25,6 @@ char *strdup_(char *s) {
 // code above inspired by the class' book implementation of strdup
 
 // allocates memory for a node + its struct
-// code below inspired by Euegene's section
 Node *node_create(char *oldspeak, char *newspeak) {
     Node *n = (Node *) malloc(sizeof(Node));
     if (n) {
@@ -40,8 +39,6 @@ Node *node_create(char *oldspeak, char *newspeak) {
     }
     return n;
 }
-
-//code above inspired by Euegene's section
 
 // frees memory for the node struct as well as newspeak and oldspeak pointers
 void node_delete(Node **n) {
